@@ -1522,6 +1522,14 @@ body.razzle-active #betAmountDisplay {
   box-shadow: 0 0 0 3px #ffd178, 0 0 25px rgba(255,184,57,.8) !important;
   animation: bonus-selection-flash .28s ease-out both !important;
 }
+/* Gold doubled-up tiles otherwise out-specificity the flash above; force it to win. */
+#payoutBoardGrid .tile.dazzle-double-up.bonus-selection-active,
+#payoutBoardGrid .tile.dazzle-boost-flash.bonus-selection-active,
+#payoutBoardGrid .tile.dazzle-double-up.dazzle-boost-flash.bonus-selection-active {
+  background: none !important;
+  box-shadow: 0 0 0 3px #ffd178, 0 0 25px rgba(255,184,57,.8) !important;
+  animation: bonus-selection-flash .28s ease-out both !important;
+}
 @keyframes bonus-selection-flash {
   0% { transform: scale(1.04); filter: brightness(2.4); }
   45% { transform: scale(1.18); filter: brightness(1.9); }
