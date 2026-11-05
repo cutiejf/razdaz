@@ -1,0 +1,151 @@
+/* =====================================================================
+   CONTROL PANEL — single coherent layout
+   Design canvas: 1320 (w) x 372 (h). Every position below is expressed in
+   canvas pixels scaled by --panel-unit, so the whole bar scales as one unit.
+   Layout map:
+     centre  : Balance (top) + Payout (bottom)  -> hero screens, match header
+     left     : Streak (top) + Bet Size (main, lower) + / - steppers
+     right    : Auto (top)   + Play (main, lower) + turbo / autoplay
+     bottom   : mute + settings (far left)   |   Ono logo (far right)
+   ===================================================================== */
+.control-bar {
+  position: relative;
+  display: block;
+  container-type: inline-size;
+  width: min(100%, calc(1320 * var(--panel-unit)));
+  margin-inline: auto;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1320 / 372;
+  max-height: 212px;
+  margin-bottom: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  --panel-unit: min(calc(100cqw / 1320), calc(212px / 372));
+}
+.control-bar::before, .control-bar::after { display: none; }
+.control-stats, .control-actions, .bet-control, .bet-stepper, .main-footer, .main-footer > div { display: contents !important; }
+
+.control-bar .control-stat, .control-bar .bet-readout, .control-bar button, .control-bar .auto-gauge, .control-bar #onoLogo {
+  position: absolute !important;
+  box-sizing: border-box;
+  margin: 0;
+  transform: none;
+}
+
+/* ---- Centre hero screens: same cabinet look as the top header boxes ---- */
+.control-bar .control-stats-left .control-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: calc(2 * var(--panel-unit));
+  padding: 0 calc(16 * var(--panel-unit));
+  overflow: hidden;
+  color: #fff;
+  text-align: center;
+  border-radius: var(--panel-radius);
+  background-color: #020204;
+  background-image: linear-gradient(165deg, rgba(205,207,222,.075) 0%, rgba(147,145,165,.025) 31%, transparent 32%, transparent 75%, rgba(61,49,78,.05) 100%);
+  border: 3px solid var(--idle-rim);
+  box-shadow: inset 0 1px 1px rgba(221,218,235,.12), inset 0 -4px 9px rgba(0,0,0,.9), 0 0 6px rgba(153,111,181,.12);
+}
+.control-bar .control-stats-left .control-stat { left: calc(372 * var(--panel-unit)); width: calc(576 * var(--panel-unit)); height: calc(140 * var(--panel-unit)); }
+.control-bar .control-stats-left .control-stat:first-child { top: calc(16 * var(--panel-unit)); }
+.control-bar .control-stats-left .control-stat:nth-child(2) { top: calc(170 * var(--panel-unit)); }
+body.razzle-active .control-bar .control-stats-left .control-stat {
+  border-color: rgba(239,190,104,.25);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.68), inset 0 0 0 3px rgba(239,190,104,.1), inset 0 1px 1px rgba(255,224,150,.08), inset 0 -3px 7px rgba(0,0,0,.48), inset 0 0 12px rgba(255,184,57,.055), 0 2px 5px rgba(0,0,0,.28), 0 0 10px rgba(255,184,57,.09);
+}
+
+/* ---- Round readouts: Streak, Auto, Bet Size (metallic lens look) ---- */
+.control-bar .control-stats-right > .control-stat:first-child,
+.control-bar .auto-gauge,
+.control-bar .bet-readout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  overflow: hidden;
+  color: #fff;
+  text-align: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid #483353;
+  background: radial-gradient(ellipse at 35% 12%, rgba(170,141,188,.22), transparent 50%), linear-gradient(165deg, #211c27, #0b090d 48%, #050407 80%, #17121a);
+  box-shadow: inset 0 2px 3px rgba(213,190,228,.22), inset 0 -5px 8px rgba(0,0,0,.85), 0 0 0 1px rgba(12,8,15,.9), 0 3px 0 #211629, 0 6px 9px rgba(0,0,0,.55);
+}
+.control-bar .control-stats-right > .control-stat:first-child { left: calc(-37.65 * var(--panel-unit)); top: calc(4 * var(--panel-unit)); width: calc(130 * var(--panel-unit)); }
+.control-bar .auto-gauge { left: calc(1227.65 * var(--panel-unit)); top: calc(4 * var(--panel-unit)); width: calc(130 * var(--panel-unit)); }
+.control-bar .auto-gauge.is-inactive .stat-label { display: none; }
+.control-bar .auto-gauge.is-inactive #autoGaugeValue { color: #9ca3af; opacity: .25; font-size: calc(26 * var(--panel-unit)); }
+.control-bar .bet-readout { left: calc(21 * var(--panel-unit)); top: calc(121 * var(--panel-unit)); width: calc(250 * var(--panel-unit)); }
+
+/* ---- Play button + its flanking action buttons ---- */
+.control-bar #rollButton { left: calc(1049 * var(--panel-unit)); top: calc(121 * var(--panel-unit)); width: calc(250 * var(--panel-unit)); height: auto; aspect-ratio: 1; border-radius: 50%; }
+.control-bar #rollButtonIcon { width: 40%; height: 40%; }
+
+.control-bar #turboButton, .control-bar #autoplayButton, .control-bar #increaseBetBtn, .control-bar #decreaseBetBtn {
+  width: calc(92 * var(--panel-unit)); height: auto; aspect-ratio: 1;
+  border: 3px solid #493054; border-radius: 50%;
+  background: linear-gradient(180deg, #392940 0%, #24192b 44%, #151019 100%);
+  box-shadow: inset 0 2px 0 rgba(220,192,233,.3), inset 0 -3px 0 rgba(0,0,0,.5), 0 0 0 1px #170e1c, 0 4px 0 #24142c, 0 7px 8px rgba(0,0,0,.65);
+  color: #fff; font: 400 calc(58 * var(--panel-unit))/1 Arial, sans-serif;
+}
+/* Paired buttons follow the arc of the main circles. */
+.control-bar #increaseBetBtn { left: calc(128.75 * var(--panel-unit)); top: calc(8.05 * var(--panel-unit)); }
+.control-bar #decreaseBetBtn { left: calc(242.84 * var(--panel-unit)); top: calc(68.60 * var(--panel-unit)); }
+.control-bar #turboButton { left: calc(1099.25 * var(--panel-unit)); top: calc(8.05 * var(--panel-unit)); }
+.control-bar #autoplayButton { left: calc(985.16 * var(--panel-unit)); top: calc(68.60 * var(--panel-unit)); }
+.control-bar #turboButton, .control-bar #autoplayButton {
+  padding: 0;
+  border-color: #493054;
+}
+.control-bar #turboButton svg, .control-bar #autoplayButton svg { width: 86%; height: 86%; }
+.control-bar #turboButton.turbo-stage-one { background: conic-gradient(from -90deg, rgba(172,233,64,.48) 0deg 180deg, #2a2a2e 180deg 360deg); }
+.control-bar #turboButton.turbo-stage-two { background: linear-gradient(145deg, #45651d, #263614); }
+.control-bar #increaseBetBtn:hover:not(:disabled), .control-bar #decreaseBetBtn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #503a5b, #302139 44%, #1d1424);
+}
+.control-bar #muteButton:hover:not(:disabled), .control-bar #settingsButton:hover:not(:disabled) { filter: brightness(1.2); }
+.control-bar :is(#turboButton, #autoplayButton, #increaseBetBtn, #decreaseBetBtn, #muteButton, #settingsButton):active:not(:disabled) { filter: brightness(.8); transform: translateY(calc(2 * var(--panel-unit))); }
+.control-bar button:focus-visible { outline: 2px solid #d5cfdf; outline-offset: 3px; }
+
+/* ---- Bottom trim: mute + Ono logo + settings ---- */
+.control-bar #muteButton, .control-bar #settingsButton {
+  top: calc(294.22 * var(--panel-unit)); width: calc(76 * var(--panel-unit)); height: auto; aspect-ratio: 1;
+  border: 3px solid #493054; border-radius: 50%;
+  background: linear-gradient(180deg, #392940 0%, #24192b 44%, #151019 100%);
+  box-shadow: inset 0 2px 0 rgba(220,192,233,.3), inset 0 -3px 0 rgba(0,0,0,.5), 0 0 0 1px #170e1c, 0 4px 0 #24142c, 0 7px 8px rgba(0,0,0,.65);
+  font-size: calc(38 * var(--panel-unit)); padding: 0; line-height: 1;
+}
+.control-bar #muteButton { left: calc(272.91 * var(--panel-unit)); }
+.control-bar #settingsButton { left: calc(971.09 * var(--panel-unit)); }
+.control-bar #settingsButton svg { width: 65% !important; height: 65% !important; }
+.control-bar #onoLogo {
+  left: calc(560 * var(--panel-unit)); top: calc(332 * var(--panel-unit));
+  width: calc(200 * var(--panel-unit)) !important; height: calc(60 * var(--panel-unit)) !important;
+  object-fit: contain; filter: grayscale(1) brightness(3);
+}
+
+/* ---- Typography ---- */
+.control-bar .stat-label { color: #9ca3af; font: 400 calc(24 * var(--panel-unit))/1 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; text-align: center; }
+.control-bar .stat-value, .control-bar #autoGaugeValue { max-width: 98%; color: #fff; font: 400 calc(48 * var(--panel-unit))/1.05 Arial, sans-serif; letter-spacing: 0; white-space: nowrap; text-align: center; }
+.control-bar .control-stats-left .control-stat .stat-label { color: #9ca3af; font: 400 calc(22.5 * var(--panel-unit))/1 Inter, sans-serif; letter-spacing: .14em; }
+.control-bar .control-stats-left .control-stat .stat-value { color: #d9dce2; font: 400 calc(67 * var(--panel-unit))/1 AlarmClock, monospace; letter-spacing: -.02em; text-shadow: 0 0 8px rgba(218, 222, 232, .18); }
+.control-bar .control-stats-right > .control-stat:first-child .stat-label,
+.control-bar .auto-gauge .stat-label { font-size: calc(20 * var(--panel-unit)); }
+.control-bar .auto-gauge .stat-label.last-round { font-size: calc(19 * var(--panel-unit)); letter-spacing: 0; white-space: nowrap; }
+.control-bar .auto-gauge.last-spin-cue { animation: last-spin-flash .325s ease-in-out 2; }
+@keyframes last-spin-flash { 50% { filter: brightness(2); box-shadow: 0 0 16px rgba(255, 190, 80, .8); } }
+@media (prefers-reduced-motion: reduce) { .control-bar .auto-gauge.last-spin-cue { animation: none; } }
+.control-bar .control-stats-right > .control-stat:first-child .stat-label { left: 0; font-size: calc(18 * var(--panel-unit)); }
+.control-bar .control-stats-right > .control-stat:first-child .stat-value,
+.control-bar #autoGaugeValue { font-size: calc(44 * var(--panel-unit)); }
+.control-bar .bet-readout .stat-label { font-size: calc(26 * var(--panel-unit)); }
+.control-bar .bet-readout .stat-value { font-size: calc(56 * var(--panel-unit)); }
+.control-bar .win-mult { position: absolute; right: 7%; bottom: 7%; font-size: calc(22 * var(--panel-unit)); }

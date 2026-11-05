@@ -1,0 +1,4032 @@
+/* ============================================
+   COMPONENTS.CSS - Tiles, Chips, Buttons
+   ============================================ */
+
+/* ===== TILES ===== */
+.tile {
+  --idle-strength: 0.22;
+  --idle-delay: 0s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.38);
+  background: linear-gradient(180deg, #0a0a0c 0%, #060607 100%);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  min-height: 78px;
+  user-select: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.035), inset 0 -8px 14px rgba(0,0,0,0.16), 0 8px 20px rgba(0,0,0,0.56);
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.tile-sum {
+  font-size: 1.86rem;
+  font-weight: 700;
+  line-height: 1.05;
+  margin-bottom: 0px;
+  color: #d5d7de;
+  position: relative;
+  top: -2px;
+  transition: transform 160ms ease, filter 160ms ease;
+}
+
+.tile-payout {
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.05;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  color: var(--lime-accent);
+  transition: transform 160ms ease, filter 160ms ease;
+}
+
+.tile-sum,
+.tile-payout {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.tile.payout-win .tile-payout,
+.tile.winning-tile .tile-payout {
+  color: #a8ff7f;
+}
+
+.tile.payout-push .tile-payout,
+.tile.payout-1 .tile-payout,
+.tile.payout-1x .tile-payout {
+  color: #d7b6ff;
+}
+
+.tile.payout-loss .tile-payout,
+.tile.losing-tile .tile-payout {
+  color: #ff8b8b;
+}
+
+.tile.highlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.28), transparent 28%, transparent 68%, rgba(255,255,255,0.1));
+  pointer-events: none;
+}
+
+.tile.highlight {
+  animation: pulse-glow 0.6s ease-in-out infinite alternate;
+  border-color: #9a63d4 !important;
+  transform: scale(1.06);
+  box-shadow: inset 0 0 18px rgba(121,63,168,0.55), 0 0 16px rgba(121,63,168,0.65);
+  background: radial-gradient(circle at center, rgba(121,63,168,0.36) 0%, 
+              rgba(121,63,168,0.18) 60%, rgba(0,0,0,0) 85%);
+  color: #f4ecff;
+}
+
+body.game-active .tile.tile-payout-hot,
+body.game-active .tile.tile-payout-elite,
+body.game-active .tile.tile-payout-hot::before,
+body.game-active .tile.tile-payout-elite::before,
+body.game-active .tile.tile-payout-hot .tile-sum,
+body.game-active .tile.tile-payout-hot .tile-payout,
+body.game-active .tile.tile-payout-elite .tile-sum,
+body.game-active .tile.tile-payout-elite .tile-payout {
+  animation: none !important;
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+body:not(.game-active) .tile::before {
+  content: '';
+  position: absolute;
+  inset: -18% -24%;
+  background: none;
+  opacity: 0;
+  animation: none;
+  pointer-events: none;
+}
+
+body:not(.game-active) .tile::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  box-shadow: 0 6px 12px var(--value-glow, rgba(174, 129, 255, 0.18));
+  opacity: .56;
+  transition: opacity 180ms ease, box-shadow 180ms ease;
+  pointer-events: none;
+}
+
+body:not(.game-active) .tile.tile-spotlight,
+body:not(.game-active) .tile.tile-focus,
+body:not(.game-active) .tile.tile-ambient,
+body:not(.game-active) .tile.tile-quiet,
+body:not(.game-active) .tile.payout-loss {
+  --shine-angle: 135deg;
+  --shine-shift: -18%;
+  --wave-delay: 0s;
+  --pulse-brightness: 1;
+  --idle-delay: 0s;
+  transform-origin: center center;
+  animation: none !important;
+  filter: none !important;
+  transform: none !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+body:not(.game-active) .tile:not(.idle-ping) .tile-sum,
+body:not(.game-active) .tile:not(.idle-ping) .tile-payout {
+  animation: none !important;
+  transform: none !important;
+  filter: none !important;
+  transform-origin: center center;
+}
+
+body:not(.game-active) .tile.tile-payout-hot::before,
+body:not(.game-active) .tile.tile-payout-elite::before {
+  opacity: 0.2;
+}
+
+body:not(.game-active) .tile.tile-payout-hot::before {
+  background: linear-gradient(var(--shine-angle),
+    transparent 0%,
+    rgba(255,255,255,0.02) 10%,
+    rgba(157, 255, 109, 0.2) 26%,
+    rgba(255,255,255,0.08) 34%,
+    rgba(157, 255, 109, 0.08) 48%,
+    transparent 58%,
+    transparent 100%);
+}
+
+body:not(.game-active) .tile.tile-payout-elite::before {
+  background: linear-gradient(var(--shine-angle),
+    transparent 0%,
+    rgba(255,255,255,0.02) 12%,
+    rgba(184, 145, 232, 0.18) 28%,
+    rgba(255,255,255,0.09) 38%,
+    rgba(184, 145, 232, 0.07) 50%,
+    transparent 62%,
+    transparent 100%);
+}
+
+body:not(.game-active) .tile.tile-payout-hot::after,
+body:not(.game-active) .tile.tile-payout-elite::after {
+  opacity: .56;
+  border-color: transparent;
+}
+
+body:not(.game-active) .tile.tile-payout-hot::after {
+  box-shadow: 0 6px 12px var(--value-glow, rgba(172, 233, 64, 0.18));
+}
+
+body:not(.game-active) .tile.tile-payout-elite::after {
+  box-shadow: 0 6px 12px var(--value-glow, rgba(184, 145, 232, 0.18));
+}
+
+body:not(.game-active) .tile.payout-loss::before {
+  background: linear-gradient(var(--shine-angle, 135deg),
+    transparent 0%,
+    rgba(255,255,255,0.02) 18%,
+    rgba(255, 120, 120, 0.16) 30%,
+    rgba(255,255,255,0.04) 42%,
+    transparent 52%,
+    transparent 100%);
+  opacity: 0.18;
+}
+
+body:not(.game-active) .tile.payout-push::before {
+  background: linear-gradient(var(--shine-angle, 135deg),
+    transparent 0%,
+    rgba(255,255,255,0.02) 18%,
+    rgba(191, 144, 255, 0.18) 30%,
+    rgba(255,255,255,0.04) 42%,
+    transparent 52%,
+    transparent 100%);
+  opacity: 0.18;
+}
+
+body:not(.game-active) .tile:not(.idle-ping) .tile-sum,
+body:not(.game-active) .tile:not(.idle-ping) .tile-payout {
+  animation-delay: calc(var(--idle-delay) + var(--wave-offset));
+  filter: drop-shadow(0 0 3px rgba(255,255,255,0.05));
+  transform-origin: center center;
+  transform: translateY(0) scale(1);
+  will-change: transform, filter, opacity;
+}
+
+body:not(.game-active) .tile.tile-spotlight .tile-sum,
+body:not(.game-active) .tile.tile-spotlight .tile-payout {
+  animation: numberPressSpotlight 7.2s cubic-bezier(0.22, 0.8, 0.2, 1) infinite;
+  animation-delay: calc(var(--idle-delay) + var(--wave-offset));
+}
+
+body:not(.game-active) .tile.tile-focus .tile-sum,
+body:not(.game-active) .tile.tile-focus .tile-payout {
+  animation: numberPressSecondary 8.7s cubic-bezier(0.22, 0.8, 0.2, 1) infinite;
+  animation-delay: calc(var(--idle-delay) * 0.8 + 0.2s + var(--wave-offset));
+}
+
+body:not(.game-active) .tile.tile-ambient .tile-sum,
+body:not(.game-active) .tile.tile-ambient .tile-payout {
+  animation: numberPressSoft 9.8s cubic-bezier(0.22, 0.8, 0.2, 1) infinite;
+  animation-delay: calc(var(--idle-delay) * 0.7 + 0.42s + var(--wave-offset));
+  filter: brightness(0.92) drop-shadow(0 0 2px rgba(255,255,255,0.03));
+}
+
+body:not(.game-active) .tile.tile-quiet .tile-sum,
+body:not(.game-active) .tile.tile-quiet .tile-payout,
+body:not(.game-active) .tile.payout-loss .tile-sum,
+body:not(.game-active) .tile.payout-loss .tile-payout {
+  animation: keyNumberReset 11.6s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+  animation-delay: calc(var(--idle-delay) * 0.95 + 0.6s + var(--wave-offset));
+  filter: brightness(0.8) drop-shadow(0 0 1px rgba(255,255,255,0.02));
+}
+
+@keyframes valuePressPulse {
+  0%, 14% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(1);
+  }
+  20% {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 9px 20px rgba(0,0,0,0.54), 0 0 0 1px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(1.04);
+  }
+  32% {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 22px rgba(0,0,0,0.22), 0 0 14px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+    filter: brightness(1.08);
+  }
+  46% {
+    transform: translateY(-7px) scale(1.12);
+    box-shadow: 0 16px 28px rgba(0,0,0,0.34), 0 0 18px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.09);
+    filter: brightness(1.12);
+  }
+  62% {
+    transform: translateY(-2px) scale(1.06);
+    box-shadow: 0 12px 22px rgba(0,0,0,0.26), 0 0 12px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+    filter: brightness(1.08);
+  }
+  72% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(1);
+  }
+}
+
+@keyframes valuePressPulseSecondary {
+  0%, 18% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(1);
+  }
+  26% {
+    transform: translateY(-1px) scale(1.015);
+    box-shadow: 0 7px 18px rgba(0,0,0,0.52), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.02);
+    filter: brightness(1.02);
+  }
+  38% {
+    transform: translateY(-3px) scale(1.06);
+    box-shadow: 0 12px 22px rgba(0,0,0,0.18), 0 0 10px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.05);
+    filter: brightness(1.05);
+  }
+  54% {
+    transform: translateY(-6px) scale(1.1);
+    box-shadow: 0 14px 26px rgba(0,0,0,0.28), 0 0 16px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.07);
+    filter: brightness(1.08);
+  }
+  70% {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.16), 0 0 10px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.04);
+    filter: brightness(1.04);
+  }
+  82% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(1);
+  }
+}
+
+@keyframes valuePressPulseSoft {
+  0%, 22% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(0.98);
+  }
+  30% {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow: 0 7px 18px rgba(0,0,0,0.55), 0 0 8px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.02);
+    filter: brightness(1.01);
+  }
+  48% {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12), 0 0 10px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
+    filter: brightness(1.04);
+  }
+  70% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(0.98);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(0.98);
+  }
+}
+
+@keyframes keyResetPress {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(0.92);
+  }
+  28% {
+    transform: translateY(2px) scale(0.992);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.58), inset 0 1px 0 rgba(0,0,0,0.2), inset 0 -2px 8px rgba(0,0,0,0.5);
+    filter: brightness(0.74) saturate(0.75);
+  }
+  62% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(0.9);
+  }
+}
+
+@keyframes keySinkPress {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.03);
+    filter: brightness(0.82) saturate(0.82);
+  }
+  24% {
+    transform: translateY(3px) scale(0.986);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.62), inset 0 1px 0 rgba(0,0,0,0.22), inset 0 -10px 14px rgba(0,0,0,0.7);
+    filter: brightness(0.66) saturate(0.7);
+  }
+  58% {
+    transform: translateY(1px) scale(0.994);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.58), inset 0 1px 0 rgba(0,0,0,0.18), inset 0 -6px 10px rgba(0,0,0,0.48);
+    filter: brightness(0.76) saturate(0.74);
+  }
+}
+
+@keyframes keyNumberReset {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(0.86) drop-shadow(0 0 1px rgba(255,255,255,0.03));
+  }
+  24% {
+    transform: translateY(2px) scale(0.992);
+    filter: brightness(0.7) drop-shadow(0 0 1px rgba(0,0,0,0.18));
+  }
+  58% {
+    transform: translateY(1px) scale(0.996);
+    filter: brightness(0.8) drop-shadow(0 0 1px rgba(255,255,255,0.02));
+  }
+}
+
+@keyframes numberPressSpotlight {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1) drop-shadow(0 0 4px rgba(255,255,255,0.1));
+  }
+  12% {
+    transform: translateY(0) scale(1.02);
+    filter: brightness(1.08) drop-shadow(0 0 6px rgba(255,255,255,0.12));
+  }
+  26% {
+    transform: translateY(-1px) scale(1.08);
+    filter: brightness(1.18) drop-shadow(0 0 10px rgba(184, 145, 232, 0.28));
+  }
+  42% {
+    transform: translateY(-2px) scale(1.14);
+    filter: brightness(1.26) drop-shadow(0 0 14px rgba(255,255,255,0.55));
+  }
+  58% {
+    transform: translateY(-1px) scale(1.08);
+    filter: brightness(1.16) drop-shadow(0 0 10px rgba(184, 145, 232, 0.22));
+  }
+  80% {
+    transform: translateY(0) scale(1.02);
+    filter: brightness(1.08) drop-shadow(0 0 5px rgba(255,255,255,0.12));
+  }
+}
+
+@keyframes numberPressSecondary {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1) drop-shadow(0 0 4px rgba(255,255,255,0.08));
+  }
+  18% {
+    transform: translateY(0) scale(1.01);
+    filter: brightness(1.06) drop-shadow(0 0 5px rgba(255,255,255,0.1));
+  }
+  34% {
+    transform: translateY(-1px) scale(1.06);
+    filter: brightness(1.12) drop-shadow(0 0 8px rgba(184, 145, 232, 0.18));
+  }
+  52% {
+    transform: translateY(-2px) scale(1.1);
+    filter: brightness(1.18) drop-shadow(0 0 12px rgba(255,255,255,0.42));
+  }
+  70% {
+    transform: translateY(-1px) scale(1.06);
+    filter: brightness(1.12) drop-shadow(0 0 6px rgba(255,255,255,0.12));
+  }
+  86% {
+    transform: translateY(0) scale(1.02);
+    filter: brightness(1.05) drop-shadow(0 0 4px rgba(255,255,255,0.08));
+  }
+}
+
+@keyframes numberPressSoft {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(0.94) drop-shadow(0 0 2px rgba(255,255,255,0.06));
+  }
+  26% {
+    transform: translateY(0) scale(1.02);
+    filter: brightness(1) drop-shadow(0 0 4px rgba(255,255,255,0.08));
+  }
+  52% {
+    transform: translateY(-1px) scale(1.04);
+    filter: brightness(1.08) drop-shadow(0 0 7px rgba(255,255,255,0.12));
+  }
+  72% {
+    transform: translateY(0) scale(1.02);
+    filter: brightness(1) drop-shadow(0 0 3px rgba(255,255,255,0.08));
+  }
+}
+
+@keyframes idleShimmer {
+  0% { transform: translate3d(-38%, 0, 0) skewX(-18deg); opacity: 0; }
+  12% { opacity: 0.18; }
+  44% { transform: translate3d(24%, 0, 0) skewX(-18deg); opacity: 0.28; }
+  70% { transform: translate3d(38%, -2px, 0) skewX(-12deg); opacity: 0.16; }
+  100% { transform: translate3d(54%, 0, 0) skewX(-18deg); opacity: 0; }
+}
+
+/* ===== DICE CHIPS ===== */
+.dice-slot {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.dice-slot.crazy-lock .dice-chip {
+  border-color: rgba(255,194,74,.92);
+  box-shadow: 0 7px 14px rgba(0,0,0,.42), 0 0 17px rgba(255,184,57,.82), inset 0 0 0 2px rgba(255,194,74,.22);
+  animation: crazy-lock-pulse 1s ease-in-out infinite;
+}
+.dice-slot.crazy-lock-enter .dice-chip {
+  animation: crazy-lock-enter 430ms cubic-bezier(.2,.8,.25,1) both;
+}
+@keyframes crazy-lock-enter {
+  0% { opacity: .35; transform: scale(.82); }
+  70% { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.dice-slot.crazy-lock::after {
+  content: 'LOCKED';
+  position: absolute;
+  z-index: 20;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1px 4px;
+  border-radius: 4px;
+  color: #251806;
+  background: #ffc24a;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  line-height: 1.25;
+}
+@keyframes crazy-lock-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.22); }
+}
+
+.dice-chip.empty {
+  border: 2px solid rgba(115,64,163,.24);
+  background: radial-gradient(circle at 50% 42%, #07050a 0%, #050407 62%, #100b16 100%);
+  box-shadow: inset 0 4px 10px rgba(0,0,0,.95), inset 0 0 10px rgba(145,91,190,.12), inset 0 0 0 1px rgba(170,120,210,.10), 0 0 7px rgba(115,64,163,.11);
+}
+/* Empty sockets stay recessed, with a faint independent glint while idle. */
+body:not(.booting):not(.no-pulse-effects):not(.battery-saver) .dice-chip.empty::before {
+  background: radial-gradient(circle at 26% 21%, rgba(207,165,244,.2), transparent 25%);
+  animation: socket-idle-breathe 5.8s ease-in-out infinite;
+}
+body:not(.booting):not(.no-pulse-effects):not(.battery-saver) .dice-chip.empty::after {
+  background: linear-gradient(100deg, transparent 35%, rgba(204,166,244,.22) 50%, transparent 65%);
+  background-size: 300% 100%;
+  animation: socket-idle-shimmer 7.5s ease-in-out infinite;
+}
+body:not(.booting):not(.no-pulse-effects):not(.battery-saver) .dice-slot:nth-child(2n) .dice-chip.empty::after { animation-delay: -2.5s; }
+body:not(.booting):not(.no-pulse-effects):not(.battery-saver) .dice-slot:nth-child(3n) .dice-chip.empty::after { animation-delay: -4.5s; }
+@keyframes socket-idle-breathe {
+  0%, 100% { opacity: .12; }
+  50% { opacity: .45; }
+}
+@keyframes socket-idle-shimmer {
+  0%, 72%, 100% { opacity: 0; background-position: 100% 0; }
+  79% { opacity: .6; }
+  90% { opacity: 0; background-position: 0 0; }
+}
+body.razzle-active .dice-chip.empty::after {
+  background-image: linear-gradient(100deg, transparent 35%, rgba(255,213,132,.23) 50%, transparent 65%);
+}
+/* The original angled glass shimmer sweeps sideways inside each socket. */
+body.boot-final-scan #rollResultsDisplay .dice-chip.empty::after {
+  background: linear-gradient(100deg, transparent 32%, rgba(219,255,169,.62) 50%, transparent 68%);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  animation: socket-final-scan 900ms cubic-bezier(.25,.46,.45,.94) both !important;
+  animation-delay: 0ms !important;
+}
+body.boot-final-scan .dice-slot:nth-child(2) .dice-chip.empty::after { animation-delay: 35ms !important; }
+body.boot-final-scan .dice-slot:nth-child(3) .dice-chip.empty::after { animation-delay: 70ms !important; }
+body.boot-final-scan .dice-slot:nth-child(4) .dice-chip.empty::after { animation-delay: 105ms !important; }
+body.boot-final-scan .dice-slot:nth-child(5) .dice-chip.empty::after { animation-delay: 140ms !important; }
+body.boot-final-scan .dice-slot:nth-child(6) .dice-chip.empty::after { animation-delay: 175ms !important; }
+body.boot-final-scan .dice-slot:nth-child(7) .dice-chip.empty::after { animation-delay: 210ms !important; }
+body.boot-final-scan .dice-slot:nth-child(8) .dice-chip.empty::after { animation-delay: 245ms !important; }
+@keyframes socket-final-scan {
+  from { opacity: 0; background-position: 100% 0; }
+  28%, 58% { opacity: 1; }
+  to { opacity: 0; background-position: 0 0; }
+}
+body.no-pulse-effects.boot-final-scan #rollResultsDisplay .dice-chip.empty::after,
+body.battery-saver.boot-final-scan #rollResultsDisplay .dice-chip.empty::after { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  body.boot-final-scan #rollResultsDisplay .dice-chip.empty::after,
+  .dice-chip.empty::before, .dice-chip.empty::after { animation: none !important; }
+}
+body.turbo-autoplay .dice-chip.empty {
+  background: radial-gradient(circle at 50% 42%, #030304 0%, #050407 62%, #100b16 100%) !important;
+}
+
+.dice-chip.empty .chip-number {
+  opacity: 0;
+}
+body.booting .unified-board {
+  border-color: #17121d;
+  box-shadow: none;
+  transition: border-color 1200ms ease, box-shadow 1200ms ease;
+}
+body.booting:not(.game-active) .roll-screen {
+  border-color: #0f0a14;
+  box-shadow: none;
+  animation: none;
+  transition: border-color 1200ms ease, box-shadow 1200ms ease;
+  position: relative;
+}
+body.booting.boot-inner-lit:not(.game-active) .roll-screen {
+  border-color: rgba(0,0,0,.92);
+  box-shadow: inset 0 0 12px rgba(0,0,0,.72), 0 8px 20px rgba(0,0,0,.56);
+}
+body.booting.boot-under-glow:not(.game-active) .roll-screen {
+  border-color: rgba(115,64,163,.26);
+  box-shadow: inset 0 0 12px rgba(0,0,0,.72), 0 8px 20px rgba(0,0,0,.56), 0 0 10px rgba(115,64,163,.08);
+}
+body.booting .roll-screen::after {
+  border-color: transparent;
+  box-shadow: none;
+  opacity: 0;
+  animation: none;
+  transition: opacity 1200ms ease;
+}
+body.booting.boot-under-glow .roll-screen::after {
+  opacity: 1;
+  border-color: rgba(115,64,163,.12);
+  box-shadow: inset 0 0 10px rgba(0,0,0,.65);
+}
+body.booting #rollResultsDisplay .dice-chip.empty {
+  opacity: 0 !important;
+  transition: opacity 1200ms ease;
+}
+body.booting.boot-inner-lit #rollResultsDisplay .dice-chip.empty { opacity: .72 !important; }
+body.booting #payoutBoardGrid {
+  max-height: var(--board-collapsed-height);
+  min-height: 0;
+  overflow: hidden;
+  transition: max-height 940ms cubic-bezier(.3,.58,.22,1);
+}
+body.booting.boot-opening #payoutBoardGrid { max-height: var(--board-expanded-height); }
+body.battery-saver.booting #payoutBoardGrid { transition-duration: 705ms; }
+body.booting.boot-under-glow #payoutBoardGrid { overflow: visible; }
+body.booting.boot-board-trim-lit .unified-board {
+  border-color: rgba(121,63,168,.55);
+}
+@keyframes boot-board-shell {
+  0% { border-color: #17121d; }
+  100% { border-color: rgba(121,63,168,.55); }
+}
+/* The key surface stays black. Only the lamp beneath it wakes after expansion. */
+body.booting #payoutBoardGrid .tile::after { opacity: 0 !important; }
+body.booting.boot-under-glow #payoutBoardGrid .tile::after {
+  opacity: .56 !important;
+  transition: opacity 900ms ease;
+}
+/* The physical keys never change material. Only their lettering switches black to white. */
+body.booting #payoutBoardGrid .tile[data-board-row="1"] { visibility: hidden; }
+body.booting.boot-29-lit #payoutBoardGrid .tile[data-board-row="1"] { visibility: visible; }
+body.booting #payoutBoardGrid .tile .tile-sum {
+  color: #000;
+  opacity: 1;
+  text-shadow: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+/* The two 29 lamps cue the opening. Their key surfaces use the same tile style. */
+body.booting.boot-trigger-primed:not(.boot-final-ignition) #payoutBoardGrid .tile[data-sum="29"] .tile-sum {
+  animation: boot-trigger-lamps 1300ms steps(1,end) both !important;
+}
+body.battery-saver.booting.boot-trigger-primed:not(.boot-final-ignition) #payoutBoardGrid .tile[data-sum="29"] .tile-sum {
+  animation-duration: 975ms !important;
+}
+@keyframes boot-trigger-lamps {
+  0%, 9%, 34%, 53%, 77% { color: #000; }
+  5%, 22%, 43%, 64%, 88%, 100% { color: #d5d7de; }
+}
+/* Final ignition: each number is either black or white, never gray. */
+body.booting.boot-final-ignition #payoutBoardGrid .tile .tile-sum {
+  animation: boot-number-switch 900ms steps(1,end) 1 both !important;
+  animation-delay: var(--boot-delay, 0ms) !important;
+  filter: none !important;
+}
+body.battery-saver.booting.boot-final-ignition #payoutBoardGrid .tile .tile-sum {
+  animation-duration: 675ms !important;
+}
+body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-sum {
+  animation: none !important;
+  color: #d5d7de;
+  transition: color 950ms ease;
+}
+body.booting #payoutBoardGrid .tile .tile-payout {
+  opacity: 0;
+  animation: none !important;
+  transition: none;
+}
+body.booting.boot-multis-igniting #payoutBoardGrid .tile .tile-payout {
+  animation: boot-multis-ignite 650ms steps(1,end) both !important;
+}
+body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-payout {
+  opacity: 1 !important;
+  animation: none !important;
+}
+@keyframes boot-multis-ignite {
+  0%, 24%, 45% { opacity: 0; }
+  13%, 36% { opacity: .55; }
+  58% { opacity: .8; }
+  70%, 100% { opacity: 1; }
+}
+@keyframes boot-number-switch {
+  0%, 13%, 30%, 59% { color: #000; opacity: 1; }
+  20% { color: #fff; opacity: .24; }
+  48% { color: #fff; opacity: .5; }
+  75% { color: #fff; opacity: .78; }
+  100% { color: #fff; opacity: 1; }
+}
+#payoutBoardGrid { transition: opacity 360ms ease-out; }
+@keyframes boot-rim-light {
+  0% { border-color: #17121d; box-shadow: none; }
+  35% { border-color: rgba(35,20,50,.28); box-shadow: 0 0 4px rgba(115,64,163,.08), inset 0 0 2px rgba(115,64,163,.02); }
+  70% { border-color: rgba(70,40,100,.42); box-shadow: 0 0 10px rgba(115,64,163,.18), inset 0 0 6px rgba(115,64,163,.06); }
+  100% { border-color: rgba(90,60,130,.52); box-shadow: 0 0 14px rgba(115,64,163,.24), inset 0 0 8px rgba(115,64,163,.08); }
+}
+@keyframes boot-power-flicker {
+  0%, 25% { box-shadow: none; }
+  35%, 55% { box-shadow: 0 0 2px rgba(115,64,163,.08), inset 0 0 1px rgba(115,64,163,.02); }
+  70%, 90% { box-shadow: 0 0 4px rgba(115,64,163,.12), inset 0 0 2px rgba(115,64,163,.04); }
+  100% { box-shadow: none; }
+}
+
+.dice-chip {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #000;
+  /* A single, continuous surface: soft planetary depth without an edge overlay. */
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255,255,255,0.55) 0 4%, rgba(255,255,255,.25) 13%, transparent 31%),
+    radial-gradient(ellipse at 72% 82%, rgba(0,0,0,0.24) 0, transparent 54%),
+    linear-gradient(128deg, transparent 29%, rgba(255,255,255,0.18) 44%, transparent 57%),
+    var(--chip-tone, #252831);
+  border: 2px solid rgba(0,0,0,0.28);
+  box-shadow: 0 7px 14px rgba(0,0,0,0.42), 0 0 8px rgba(162,127,255,0.14);
+  opacity: 0;
+  transform: none;
+  transform-style: preserve-3d;
+  transition: opacity 180ms ease, box-shadow 180ms ease;
+  will-change: opacity;
+  margin: 0;
+  z-index: 10;
+  flex: 0 0 auto;
+}
+
+.dice-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dice-chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: none;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: none;
+}
+
+.chip-number {
+  position: relative;
+  z-index: 4;
+  color: #070707;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  font-size: 1.42em;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.24);
+  transform: translate3d(-1px, -1px, 2px);
+}
+
+.dice-chip.stale .chip-number {
+  animation: stale-number-shimmer 4.8s ease-in-out infinite;
+}
+
+@keyframes stale-number-shimmer {
+  0%, 100% { filter: brightness(.78); text-shadow: 0 1px 0 rgba(255,255,255,.08), 0 2px 5px rgba(0,0,0,.4); }
+  50% { filter: brightness(.93); text-shadow: 0 1px 0 rgba(255,255,255,.12), 0 0 7px rgba(180,155,255,.16); }
+}
+
+.dice-chip.stale {
+  filter: saturate(0.82) brightness(0.86);
+  opacity: 0.94;
+}
+
+.dice-chip.chip-reveal {
+  opacity: 1;
+  transform: none;
+}
+.dice-chip.sweet16-impact {
+  animation: sweet16-ball-land 320ms cubic-bezier(.18,.8,.3,1) both;
+}
+@keyframes sweet16-ball-land {
+  0% { transform: translateY(-7px) scale(.96); }
+  58% { transform: translateY(1px) scale(1.025, .975); }
+  100% { transform: none; }
+}
+
+.dice-chip:hover { transform: scale(1.02); }
+
+/* Per-number tones. Number six is a second purple, never a white ball. */
+.dice-chip.num-1 { --chip-tone: #252831; }
+.dice-chip.num-2 { --chip-tone: #59616f; }
+.dice-chip.num-3 { --chip-tone: #7d46bf; }
+.dice-chip.num-4 { --chip-tone: #28785b; }
+.dice-chip.num-5 { --chip-tone: #87b526; }
+.dice-chip.num-6 { --chip-tone: #a568d2; }
+
+.dice-chip.num-1::before, .dice-chip.num-2::before, .dice-chip.num-3::before,
+.dice-chip.num-4::before, .dice-chip.num-5::before, .dice-chip.num-6::before {
+  border: 0;
+  box-shadow: none;
+}
+
+.dice-chip.num-1::before, .dice-chip.num-2::before, .dice-chip.num-3::before,
+.dice-chip.num-4::before, .dice-chip.num-5::before, .dice-chip.num-6::before {
+  background: none;
+}
+
+/* No glow mode */
+.dice-chip.no-glow { box-shadow: none !important; }
+
+/* ===== BUTTONS ===== */
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Main Roll Button */
+#rollButton {
+  position: relative;
+  top: -6px;
+  z-index: 10;
+  overflow: hidden;
+  flex: 0 0 auto;
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 25% 18%, rgba(255,255,255,.97), rgba(230,238,243,.48) 27%, transparent 56%),
+    radial-gradient(circle at 78% 83%, rgba(48,60,72,.47), transparent 52%),
+    linear-gradient(145deg, #e2e9ed 0%, #aab5be 52%, #697784 100%);
+  border: 5px solid #202127;
+  box-shadow: inset 0 3px 5px rgba(255,255,255,.55),
+              inset 0 -10px 14px rgba(25,35,45,.42),
+              0 1px 0 rgba(215,223,230,.22),
+              0 7px 13px rgba(0,0,0,.62),
+              0 0 0 3px rgba(0,0,0,.4);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0b0b0b;
+}
+
+/* Low-contrast craters sit under the icon, preserving the Play silhouette. */
+#rollButton:not(.razzle-launch)::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 32% 39%, rgba(51,65,77,.30) 0 7%, rgba(248,251,253,.27) 10%, transparent 16%),
+    radial-gradient(circle at 70% 30%, rgba(58,71,83,.25) 0 5%, rgba(248,251,253,.21) 8%, transparent 13%),
+    radial-gradient(circle at 62% 73%, rgba(48,62,74,.30) 0 10%, rgba(248,251,253,.22) 13%, transparent 20%),
+    radial-gradient(circle at 21% 72%, rgba(55,68,80,.22) 0 4%, rgba(245,250,253,.12) 7%, transparent 11%);
+}
+#rollButton:not(.razzle-launch)::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at 85% 55%, rgba(13,19,27,.43), transparent 58%);
+  box-shadow: inset 0 2px 5px rgba(18,25,31,.35), inset 0 -1px 2px rgba(255,255,255,.48);
+}
+#rollButton > * { position: relative; z-index: 1; }
+
+/* The moon terrain and terminator drift slowly even while waiting to play. */
+body:not(.no-pulse-effects):not(.battery-saver) #rollButton:not(.razzle-launch)::before {
+  animation: moon-surface-orbit 38s linear infinite;
+}
+body:not(.no-pulse-effects):not(.battery-saver) #rollButton:not(.razzle-launch)::after {
+  animation: moon-shadow-drift 26s ease-in-out infinite alternate;
+}
+@keyframes moon-surface-orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes moon-shadow-drift {
+  from { transform: rotate(-12deg); opacity: .68; }
+  to { transform: rotate(26deg); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #rollButton::before, #rollButton::after { animation: none !important; }
+}
+
+/* A running roll disables clicking, but must not gray out the moon. */
+body.moon-rolling #rollButton:not(.razzle-launch):disabled { opacity: 1; }
+body.moon-rolling #rollButton:not(.razzle-launch) #autoplayCountdown:not(.hidden) {
+  background: rgba(15,20,27,.78);
+  color: #f1f5f8;
+  border-color: rgba(225,235,241,.27);
+  box-shadow: 0 2px 5px rgba(0,0,0,.38);
+  text-shadow: none;
+}
+
+#rollButton:hover:not(:disabled) {
+  filter: brightness(1.1);
+  box-shadow: inset 0 3px 5px rgba(255,255,255,.55),
+              inset 0 -10px 14px rgba(25,35,45,.42),
+              0 10px 18px rgba(0,0,0,.62),
+              0 0 12px rgba(115,64,163,.22);
+}
+
+#rollButton:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.4),
+              0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* A quiet invitation, only after the fully idle Play control has waited. */
+body:not(.booting):not(.moon-rolling):not(.modal-open):not(.razzle-active):not(.no-pulse-effects):not(.battery-saver) #rollButton:not(:disabled):not(.razzle-launch) {
+  animation: moon-idle-cue 4.8s ease-in-out 3s infinite;
+}
+@keyframes moon-idle-cue {
+  0%, 24%, 100% { box-shadow: inset 0 3px 5px rgba(255,255,255,.55), inset 0 -10px 14px rgba(25,35,45,.42), 0 1px 0 rgba(215,223,230,.22), 0 7px 13px rgba(0,0,0,.62), 0 0 0 3px rgba(0,0,0,.4); }
+  48% { box-shadow: inset 0 3px 5px rgba(255,255,255,.6), inset 0 -10px 14px rgba(25,35,45,.38), 0 1px 0 rgba(215,223,230,.26), 0 7px 13px rgba(0,0,0,.62), 0 0 14px 3px rgba(146,102,191,.24); }
+  72% { box-shadow: inset 0 3px 5px rgba(255,255,255,.55), inset 0 -10px 14px rgba(25,35,45,.42), 0 1px 0 rgba(215,223,230,.22), 0 7px 13px rgba(0,0,0,.62), 0 0 0 3px rgba(0,0,0,.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body #rollButton { animation: none !important; }
+}
+
+/* Side Buttons (Turbo/Autoplay) */
+.side-btn, #turboButton, #autoplayButton {
+  flex: 0 0 auto;
+  width: 50px;
+  height: 50px;
+  border-radius: 9999px;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #2a2a2e, #1a1a1e);
+  color: var(--text-neutral);
+  border: 2px solid #222;
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.1),
+              inset 0 -3px 4px rgba(0, 0, 0, 0.2),
+              0 6px 12px rgba(0,0,0,0.4);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+  position: relative;
+}
+.control-actions { gap: 1.1rem; }
+.control-actions #turboButton,
+.control-actions #autoplayButton { width: 52px; height: 52px; }
+.main-autoplay-pause {
+  position: absolute !important;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.main-autoplay-pause.hidden { display: none; }
+.main-autoplay-pause i {
+  display: block;
+  width: 6px;
+  height: 25px;
+  border-radius: 2px;
+  background: #1a2025;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+#rollButtonIcon { width: 40px; height: 40px; }
+#turboButton > svg:first-child,
+#autoplayIcon { width: 23px; height: 23px; }
+
+.side-btn:hover:not(:disabled), 
+#turboButton:hover:not(:disabled),
+#autoplayButton:hover:not(:disabled) {
+  filter: brightness(1.15);
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.1),
+              inset 0 -3px 4px rgba(0, 0, 0, 0.2),
+              0 8px 16px rgba(0,0,0,0.5),
+              0 0 12px rgba(115, 64, 163, 0.3);
+}
+
+.side-btn:active:not(:disabled),
+#turboButton:active:not(:disabled),
+#autoplayButton:active:not(:disabled) {
+  transform: translateY(1px);
+  filter: brightness(0.9);
+}
+
+.side-btn.active, #turboButton.active, #autoplayButton.active {
+  border-color: rgba(172, 233, 64, 0.6);
+  box-shadow: 0 8px 20px rgba(172, 233, 64, 0.3), 
+              inset 0 0 12px rgba(172, 233, 64, 0.15);
+}
+
+/* Turbo has two deliberate stages: a half-filled fast mode, then full Super Turbo. */
+#turboButton.turbo-stage-one {
+  background: conic-gradient(from -90deg, rgba(172,233,64,0.48) 0deg 180deg, #2a2a2e 180deg 360deg);
+  border-color: rgba(172,233,64,0.5);
+}
+
+#turboButton.turbo-stage-two {
+  background: linear-gradient(145deg, #45651d, #263614);
+  border-color: rgba(172,233,64,0.76);
+  box-shadow: 0 8px 20px rgba(172,233,64,0.36), inset 0 0 14px rgba(172,233,64,0.2);
+}
+
+/* Bet Buttons */
+.bet-btn, #increaseBetBtn, #decreaseBetBtn {
+  width: 28px;
+  height: 24px;
+  padding: 0;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #643d81 0%, #4a2d5f 100%);
+  color: #f5f5f5;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.bet-btn:hover:not(:disabled),
+#increaseBetBtn:hover:not(:disabled),
+#decreaseBetBtn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #7340a3 0%, #5a3670 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(115, 64, 163, 0.4);
+}
+
+.bet-stepper #increaseBetBtn,
+.bet-stepper #decreaseBetBtn {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 1rem;
+  line-height: 1;
+}
+.bet-stepper #increaseBetBtn { border-bottom: 1px solid rgba(255,255,255,.12); }
+.bet-stepper #decreaseBetBtn { border-top: 0; }
+
+/* Footer Buttons */
+.footer-btn, #muteButton, #settingsButton, #reloadButtonFooter {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: #d7d7da;
+  border: 2px solid #222;
+  background: linear-gradient(145deg, #2a2a2e, #1a1a1e);
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.05),
+              inset 0 -3px 4px rgba(0, 0, 0, 0.2),
+              0 6px 14px rgba(0,0,0,0.6);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+  position: relative;
+}
+
+#reloadButtonFooter { font-size: 17px; width: 44px; height: 36px; }
+
+.footer-btn svg, #muteButton svg, #settingsButton svg {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.35));
+}
+
+.footer-btn:hover:not(:disabled),
+#muteButton:hover:not(:disabled),
+#settingsButton:hover:not(:disabled),
+#reloadButtonFooter:hover:not(:disabled) {
+  filter: brightness(1.2);
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.05),
+              inset 0 -3px 4px rgba(0, 0, 0, 0.2),
+              0 8px 18px rgba(0,0,0,0.7),
+              0 0 8px rgba(115, 64, 163, 0.3);
+}
+
+/* Badges */
+.auto-badge, #autoplayBadge {
+  position: absolute;
+  right: -6px;
+  top: -6px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--lime-accent) 0%, #8cc616 100%);
+  color: #052a00;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.6);
+  pointer-events: none;
+}
+
+.roll-autoplay-badge, #rollAutoplayBadge, #autoplayCountdown {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff 0%, #e6e9ec 100%);
+  color: #041018;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.6), 0 0 6px rgba(0,0,0,0.18) inset;
+  border: 1px solid rgba(255,255,255,0.6);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  pointer-events: none;
+}
+
+/* Text Styles */
+.stat-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-neutral);
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  color: white;
+}
+.control-bar .stat-label, .control-bar .stat-value { text-align: inherit; }
+.control-bar .stat-value { font-variant-numeric: tabular-nums; white-space: nowrap; font-size: clamp(1rem, 2.2vw, 1.6rem); }
+
+.win-mult {
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #d4bfff;
+  text-align: center;
+}
+
+/* Utility Classes */
+.hidden { display: none !important; }
+.dazzle-options { display: grid; grid-template-columns: 1fr; gap: 0.55rem; margin: 1rem 0; }
+.dazzle-options.dazzle-options-locked { opacity: .7; pointer-events: none; }
+.dazzle-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 68px;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  color: #f1e9ff;
+  background: linear-gradient(145deg, #30213f, #1b1821);
+  border: 1px solid rgba(166,105,214,0.5);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 5px 14px rgba(0,0,0,0.3);
+}
+.dazzle-option:hover { border-color: rgba(202,156,255,0.82); background: linear-gradient(145deg, #43285d, #24182f); }
+.dazzle-option.selected {
+  border-color: #d7a8ff;
+  background: linear-gradient(145deg, #52326d, #2b1b3b);
+  box-shadow: inset 0 0 0 1px rgba(215,168,255,.42), 0 0 15px rgba(166,105,214,.32);
+}
+.dazzle-option strong { flex: 0 0 112px; font-size: 1rem; }
+.dazzle-option span { flex: 1; font-size: 0.78rem; color: #c9d7b0; }
+.dazzle-risk {
+  flex: 0 0 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  color: #c9c5cb;
+}
+.dazzle-risk small {
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.risk-dots { display: flex; gap: 5px; }
+.risk-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid rgba(245,203,120,.58);
+  background: transparent;
+}
+.risk-dots i.filled { background: #e7b457; box-shadow: 0 0 6px rgba(255,184,57,.32); }
+.dazzle-modal { min-width: 0; box-sizing: border-box; }
+.dazzle-continue { margin-top: .45rem; text-align: center; }
+.dazzle-double-option { cursor: default; }
+.dazzle-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; flex: 0 0 120px; }
+.dazzle-split button { padding: 0.45rem; border-radius: 7px; color: #e9deff; background: rgba(115,64,163,0.3); border: 1px solid rgba(183,132,235,0.42); font-size: 0.7rem; font-weight: 700; line-height: 1.2; }
+.dazzle-split button:hover { background: rgba(133,75,190,0.58); }
+.dazzle-split button.selected { background: rgba(166,105,214,.72); border-color: #e0baff; }
+.dazzle-continue .modal-actions button:disabled { opacity: .45; cursor: not-allowed; }
+@media (max-width: 540px) {
+  .dazzle-option { flex-wrap: wrap; border-radius: 10px; }
+  .dazzle-option strong { flex-basis: 100px; }
+  .dazzle-split { margin-left: auto; }
+}
+
+/* A doubled total is marked in gold while a Razzle Dazzle package is active. */
+#payoutBoardGrid .tile.dazzle-double-up {
+  background: radial-gradient(circle at 50% 88%, rgba(255,184,57,.13), transparent 67%), linear-gradient(180deg, #211b12 0%, #13110e 100%) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,.5), 0 0 15px rgba(255,184,57,.22) !important;
+  animation: none !important;
+}
+#payoutBoardGrid .tile.dazzle-double-up::before {
+  content: none !important;
+  display: none !important;
+}
+#payoutBoardGrid .tile.dazzle-double-up .tile-payout {
+  color: #a8ff7f !important;
+  text-shadow: none !important;
+}
+#payoutBoardGrid .tile.dazzle-double-up::after {
+  opacity: .75 !important;
+  border-color: transparent !important;
+  background: none !important;
+  box-shadow: 0 7px 15px rgba(255,184,57,.28) !important;
+  animation: none !important;
+}
+#payoutBoardGrid .tile.dazzle-target-preview::after {
+  opacity: 1 !important;
+  border-color: transparent !important;
+  background: none !important;
+  box-shadow: 0 0 18px rgba(255,194,74,.72) !important;
+  animation: dazzle-target-preview .26s ease-out both !important;
+}
+#payoutBoardGrid .tile.dazzle-double-up.dazzle-boost-flash {
+  background: radial-gradient(circle at 50% 88%, rgba(255,184,57,.13), transparent 67%), linear-gradient(180deg, #211b12 0%, #13110e 100%) !important;
+  animation: dazzle-boost-flash .9s ease-out both !important;
+}
+#payoutBoardGrid .tile.dazzle-boost-flash .tile-sum,
+#payoutBoardGrid .tile.dazzle-boost-flash .tile-payout {
+  color: #e4e6eb !important;
+  text-shadow: 0 0 8px rgba(255,194,74,.52) !important;
+}
+@keyframes dazzle-boost-flash {
+  0% { filter: brightness(1.45); box-shadow: 0 0 25px rgba(255,194,74,.72); }
+  100% { filter: brightness(1); box-shadow: 0 8px 20px rgba(0,0,0,.5), 0 0 15px rgba(255,184,57,.24); }
+}
+@keyframes dazzle-target-preview {
+  0% { opacity: .42; filter: brightness(1); }
+  48% { opacity: 1; filter: brightness(1.45); }
+  100% { opacity: .94; filter: brightness(1.1); }
+}
+@keyframes dazzle-target-lock {
+  0%, 100% { opacity: .68; box-shadow: 0 6px 12px rgba(255,184,57,.22), inset 0 -2px 7px rgba(255,184,57,.1); }
+  50% { opacity: 1; box-shadow: 0 8px 20px rgba(255,184,57,.55), inset 0 -2px 12px rgba(255,184,57,.24); }
+}
+@keyframes dazzle-tile-lamp {
+  0%, 100% { filter: brightness(1); box-shadow: 0 8px 20px rgba(0,0,0,.5), 0 0 10px rgba(255,184,57,.18); }
+  50% { filter: brightness(1.2); box-shadow: 0 8px 20px rgba(0,0,0,.42), 0 0 25px rgba(255,184,57,.68); }
+}
+
+/* Bonus mode: all gold accents live under razzle-active. Pulse, background,
+   and battery-saver overrides are kept with their settings rules below. */
+body.razzle-active { --lime-accent: #f2c879; }
+body.razzle-active #game-container {
+  box-shadow: 0 28px 72px rgba(0,0,0,.65), 0 0 0 1px rgba(255,205,116,.28), 0 0 54px rgba(236,178,74,.34), 0 0 90px rgba(236,178,74,.14);
+}
+body.razzle-active:not(.no-pulse-effects):not(.battery-saver) #game-container {
+  animation: razzle-arrival 1.3s ease-out 1;
+}
+@keyframes razzle-arrival {
+  0% { box-shadow: 0 28px 72px rgba(0,0,0,.65), 0 0 0 rgba(236,178,74,0); }
+  42% { box-shadow: 0 28px 72px rgba(0,0,0,.65), 0 0 68px rgba(255,205,116,.55), 0 0 110px rgba(236,178,74,.2); }
+  100% { box-shadow: 0 28px 72px rgba(0,0,0,.65), 0 0 54px rgba(236,178,74,.34), 0 0 90px rgba(236,178,74,.14); }
+}
+body.razzle-active .main-container {
+  border-color: rgba(235, 181, 83, .62);
+  box-shadow: 0 16px 36px rgba(0,0,0,.56), 0 0 38px rgba(255,184,57,.38), inset 0 2px 8px rgba(255,224,150,.04);
+}
+body.razzle-active .main-container.purple-glow-pulse {
+  animation: razzle-frame-pulse 3.4s ease-in-out infinite;
+}
+/* Tiny bonus-only contacts along the outside; they never become labels. */
+body.razzle-active:not(.booting) .main-container::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 11% 0%, rgba(255,213,135,.75) 0 1px, transparent 2px),
+    radial-gradient(circle at 36% 0%, rgba(255,213,135,.45) 0 1px, transparent 2px),
+    radial-gradient(circle at 73% 0%, rgba(255,213,135,.6) 0 1px, transparent 2px),
+    radial-gradient(circle at 92% 0%, rgba(255,213,135,.5) 0 1px, transparent 2px),
+    radial-gradient(circle at 100% 27%, rgba(255,213,135,.5) 0 1px, transparent 2px),
+    radial-gradient(circle at 100% 75%, rgba(255,213,135,.65) 0 1px, transparent 2px),
+    radial-gradient(circle at 19% 100%, rgba(255,213,135,.55) 0 1px, transparent 2px),
+    radial-gradient(circle at 82% 100%, rgba(255,213,135,.5) 0 1px, transparent 2px),
+    radial-gradient(circle at 0% 58%, rgba(255,213,135,.62) 0 1px, transparent 2px);
+  opacity: .42;
+  animation: razzle-edge-dots 5.6s ease-in-out infinite;
+}
+@keyframes razzle-edge-dots {
+  0%, 100% { opacity: .28; }
+  50% { opacity: .6; }
+}
+body.no-pulse-effects.razzle-active .main-container::after,
+body.battery-saver.razzle-active .main-container::after { animation: none; }
+
+/* Bonus sky is a light overlay on the existing starfield, never a second scene. */
+body.razzle-active .space-backdrop {
+  /* Keep the canvas stars and gold showers visible beneath this tint. */
+  background: radial-gradient(ellipse at 50% 20%, rgba(122,83,28,.17), transparent 70%);
+}
+body.razzle-active .space-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 24%, rgba(255,224,154,.72) 0 1px, transparent 2px),
+    radial-gradient(circle at 28% 68%, rgba(255,224,154,.58) 0 1px, transparent 2px),
+    radial-gradient(circle at 43% 12%, rgba(255,224,154,.7) 0 1px, transparent 2px),
+    radial-gradient(circle at 61% 48%, rgba(255,224,154,.56) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 18%, rgba(255,224,154,.68) 0 1px, transparent 2px),
+    radial-gradient(circle at 89% 72%, rgba(255,224,154,.55) 0 1px, transparent 2px),
+    radial-gradient(circle at 6% 47%, rgba(255,224,154,.56) 0 1px, transparent 2px),
+    radial-gradient(circle at 17% 83%, rgba(255,224,154,.66) 0 1px, transparent 2px),
+    radial-gradient(circle at 33% 34%, rgba(255,224,154,.65) 0 1px, transparent 2px),
+    radial-gradient(circle at 51% 86%, rgba(255,224,154,.55) 0 1px, transparent 2px),
+    radial-gradient(circle at 68% 67%, rgba(255,224,154,.66) 0 1px, transparent 2px),
+    radial-gradient(circle at 95% 40%, rgba(255,224,154,.63) 0 1px, transparent 2px);
+  opacity: .38;
+  animation: razzle-sky-sparkle 7s ease-in-out infinite;
+}
+/* In bonus mode the meteors become stationary, staggered gold puffs. */
+.shooting-star.bonus-only { display: none; }
+body.razzle-active .shooting-star {
+  top: auto;
+  right: auto;
+  width: 5px;
+  height: 5px;
+  background: #f5d58d;
+  box-shadow: 0 0 8px rgba(255,210,117,.55);
+  opacity: 0;
+  animation: razzle-spark-puff 3.8s ease-out infinite;
+}
+body.razzle-active .shooting-star::before { display: none; }
+body.razzle-active .shooting-star.bonus-only { display: block; }
+body.razzle-active .shooting-star.one { top: 13%; left: 9%; animation-delay: .2s; }
+body.razzle-active .shooting-star.two { top: 35%; left: 85%; animation-delay: 1.3s; }
+body.razzle-active .shooting-star.three { top: 71%; left: 17%; animation-delay: 2.1s; }
+body.razzle-active .shooting-star.four { top: 82%; left: 75%; animation-delay: .9s; }
+body.razzle-active .shooting-star.five { top: 19%; left: 64%; animation-delay: 2.9s; }
+body.razzle-active .shooting-star.six { top: 53%; left: 5%; animation-delay: 3.3s; }
+body.razzle-active .shooting-star.seven { top: 57%; left: 94%; animation-delay: 1.8s; }
+body.razzle-active .shooting-star.eight { top: 91%; left: 42%; animation-delay: 2.5s; }
+body.razzle-active .shooting-star.nine { top: 26%; left: 24%; animation-delay: 3.7s; }
+body.razzle-active .shooting-star.ten { top: 66%; left: 72%; animation-delay: 1.1s; }
+body.razzle-active .shooting-star.eleven { top: 44%; left: 48%; animation-delay: 2.8s; }
+body.razzle-active .shooting-star.twelve { top: 87%; left: 91%; animation-delay: .6s; }
+body.razzle-active .shooting-star.thirteen { top: 8%; left: 31%; animation-delay: 2.3s; }
+body.razzle-active .shooting-star.fourteen { top: 39%; left: 3%; animation-delay: .4s; }
+body.razzle-active .shooting-star.fifteen { top: 78%; left: 96%; animation-delay: 3.1s; }
+body.razzle-active .shooting-star.sixteen { top: 61%; left: 28%; animation-delay: 1.6s; }
+body.razzle-active .shooting-star.seventeen { top: 16%; left: 82%; animation-delay: 3.4s; }
+body.razzle-active .shooting-star.eighteen { top: 93%; left: 62%; animation-delay: .8s; }
+body.razzle-active .shooting-star.nineteen { top: 49%; left: 67%; animation-delay: 2.6s; }
+body.razzle-active .shooting-star.twenty { top: 73%; left: 55%; animation-delay: 1.4s; }
+@keyframes razzle-spark-puff {
+  0%, 72%, 100% { opacity: 0; transform: scale(.2); box-shadow: 0 0 0 rgba(255,210,117,0); }
+  79% { opacity: .75; transform: scale(1.25); box-shadow: 0 0 11px 3px rgba(255,210,117,.48); }
+  87% { opacity: .35; transform: scale(2.1); box-shadow: 0 0 16px 6px rgba(255,210,117,.2); }
+}
+body.no-pulse-effects.razzle-active .shooting-star { animation: none; opacity: .18; transform: none; }
+body.no-pulse-effects.razzle-active .space-backdrop::after {
+  animation: none;
+  opacity: .14;
+}
+body.battery-saver.razzle-active #game-container,
+body.battery-saver.razzle-active .main-container,
+body.battery-saver.razzle-active .main-container::before,
+body.battery-saver.razzle-active .unified-board::after,
+body.battery-saver.razzle-active .control-bar::after,
+body.battery-saver.razzle-active .main-footer::after {
+  box-shadow: none !important;
+}
+body.battery-saver.razzle-active .dice-chip:not(.empty)::after {
+  background: none;
+  box-shadow: none;
+}
+@keyframes razzle-sky-sparkle {
+  0%, 100% { opacity: .24; }
+  50% { opacity: .52; }
+}
+@keyframes razzle-frame-pulse {
+  0%, 100% { box-shadow: 0 16px 36px rgba(0,0,0,.56), 0 0 32px rgba(236,178,74,.3), inset 0 2px 8px rgba(255,224,150,.04); }
+  50% { box-shadow: 0 16px 36px rgba(0,0,0,.56), 0 0 48px rgba(236,178,74,.46), inset 0 2px 12px rgba(255,224,150,.07); }
+}
+body.razzle-active .main-container::before {
+  border-color: rgba(255, 198, 93, .7);
+  box-shadow: 0 0 22px rgba(255,184,57,.42), 0 0 44px rgba(255,184,57,.28), inset 0 0 8px rgba(255,224,150,.06);
+}
+body.razzle-active .unified-board,
+body.razzle-active .main-footer {
+  border-color: rgba(231, 177, 75, .55);
+  box-shadow: 0 0 18px rgba(255,184,57,.17), inset 0 0 10px rgba(255,184,57,.045);
+}
+body.razzle-active .unified-board::after,
+body.razzle-active .control-bar::after,
+body.razzle-active .main-footer::after {
+  box-shadow: 0 0 0 3px rgba(255,205,116,.16), 0 6px 22px rgba(0,0,0,.55), 0 0 24px rgba(255,184,57,.25);
+}
+body.razzle-active .game-title-logo,
+body.razzle-active #onoLogo {
+  filter: hue-rotate(125deg) saturate(1.18) drop-shadow(0 0 9px rgba(255,184,57,.3));
+}
+body.razzle-active .control-bar {
+  border-color: rgba(231, 177, 75, .48);
+  box-shadow: inset 0 0 14px rgba(255, 184, 57, .055), 0 0 15px rgba(255, 184, 57, .12);
+}
+body.razzle-active .control-actions { border-color: rgba(231, 177, 75, .25); }
+body.razzle-active .bet-stepper {
+  background: #080706;
+  border-color: rgba(199,150,72,.48);
+  box-shadow: -3px 0 8px rgba(0,0,0,.5), inset 1px 0 4px rgba(221,166,72,.12);
+}
+body.razzle-active .bet-stepper #increaseBetBtn,
+body.razzle-active .bet-stepper #decreaseBetBtn {
+  color: #d1a65d;
+  background: linear-gradient(180deg, #17120b, #080706);
+  border-color: rgba(198,151,75,.24);
+  text-shadow: 0 0 5px rgba(218,166,78,.24);
+}
+body.razzle-active .bet-stepper #increaseBetBtn { border-bottom-color: rgba(198,151,75,.32); }
+body.razzle-active .bet-stepper button:disabled { opacity: .78; }
+body.razzle-active .bet-stepper button:hover:not(:disabled) {
+  background: linear-gradient(180deg, #382815, #171008);
+  color: #f1c778;
+}
+body.razzle-active #betAmountDisplay {
+  color: #9b773d !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,.8), 0 0 5px rgba(154,106,38,.16);
+}
+#dazzleModal > .dazzle-modal {
+  border-color: rgba(231,177,75,.58);
+  background: linear-gradient(180deg, #201c21 0%, #101014 100%);
+  box-shadow: 0 20px 50px rgba(0,0,0,.8), 0 0 32px rgba(231,177,75,.16), inset 0 1px 0 rgba(255,228,171,.08);
+}
+#dazzleModal .modal-title { color: #ffdb98; text-shadow: 0 0 12px rgba(255, 184, 57, .28); }
+#dazzleModal .dazzle-option {
+  background: linear-gradient(145deg, #29242b, #141318);
+  border-color: rgba(224,183,106,.32);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 6px 15px rgba(0,0,0,.34);
+}
+#dazzleModal .dazzle-option:hover {
+  background: linear-gradient(145deg, #383039, #1d1a20);
+  border-color: rgba(245,203,120,.65);
+}
+#dazzleModal .dazzle-option strong { color: #f4ead7; }
+#dazzleModal .dazzle-option span { color: #c9c5cb; }
+#dazzleModal .dazzle-option.selected {
+  background: linear-gradient(145deg, #3b3122, #1e1a17);
+  border-color: rgba(255, 206, 112, .8);
+  box-shadow: inset 0 0 0 1px rgba(255, 206, 112, .26), 0 0 16px rgba(255, 184, 57, .25);
+}
+#dazzleModal .dazzle-option.selected { flex-direction: column; align-items: center; gap: 12px; padding: 24px; text-align: center; }
+#dazzleModal .dazzle-option.selected strong { flex: none; font-size: 1.5rem; }
+#dazzleModal .dazzle-option.selected span { font-size: 1rem; line-height: 1.5; }
+#payoutBoardGrid .tile.bonus-selection-active {
+  z-index: 20;
+  box-shadow: 0 0 0 3px #ffd178, 0 0 25px rgba(255,184,57,.8) !important;
+  animation: bonus-selection-flash .28s ease-out both !important;
+}
+@keyframes bonus-selection-flash {
+  0% { transform: scale(1.04); filter: brightness(2.4); }
+  45% { transform: scale(1.18); filter: brightness(1.9); }
+  100% { transform: scale(1.13); filter: brightness(1.5); }
+}
+body:is(.battery-saver, .no-pulse-effects) #payoutBoardGrid .tile.bonus-selection-active { transform: none !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  #payoutBoardGrid .tile.bonus-selection-active { transform: none !important; animation: none !important; }
+}
+body.razzle-active #payoutBoardGrid {
+  box-shadow: 0 0 22px rgba(255,184,57,.36), inset 0 0 24px rgba(255,184,57,.07);
+  animation: razzle-board-breath 1.45s ease-in-out infinite;
+}
+/* Keep the physical grid unchanged; dark recesses and a faint moving reflection
+   make neighboring gold-lit keys read as separate buttons. */
+body.razzle-active #payoutBoardGrid .tile:not(.highlight):not(.dazzle-double-up):not(.dazzle-target-preview) {
+  box-shadow: 0 0 0 2px #050406, 0 8px 15px rgba(0,0,0,.72), inset 0 1px 0 rgba(247,198,112,.1) !important;
+}
+body.razzle-active:not(.no-pulse-effects):not(.battery-saver) #payoutBoardGrid .tile::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  background-image: linear-gradient(108deg, transparent 34%, rgba(255,215,139,.12) 49%, transparent 64%) !important;
+  background-size: 270% 100% !important;
+  opacity: .7 !important;
+  pointer-events: none;
+  animation: bonus-key-sheen 8.5s ease-in-out infinite !important;
+}
+body.razzle-active #payoutBoardGrid .tile:nth-child(3n)::before { animation-delay: -2.8s !important; }
+body.razzle-active #payoutBoardGrid .tile:nth-child(3n + 1)::before { animation-delay: -5.6s !important; }
+@keyframes bonus-key-sheen {
+  0%, 67% { background-position: 100% 0; }
+  88%, 100% { background-position: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.razzle-active #payoutBoardGrid .tile::before { animation: none !important; opacity: 0 !important; }
+}
+body.razzle-intro .roll-screen {
+  animation: razzle-intro-glow 700ms ease-out both;
+}
+@keyframes razzle-intro-glow {
+  0% { box-shadow: 0 0 0 rgba(255,184,57,0), inset 0 0 0 rgba(255,184,57,0); }
+  45% { box-shadow: 0 0 28px rgba(255,184,57,.42), inset 0 0 20px rgba(255,184,57,.14); }
+  100% { box-shadow: 0 0 22px rgba(255,184,57,.26), inset 0 0 16px rgba(255,184,57,.08); }
+}
+body.razzle-active .status-box {
+  border-color: rgba(239,190,104,.25);
+  background: rgba(255,184,57,.035);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.68), inset 0 0 0 3px rgba(239,190,104,.1), inset 0 1px 1px rgba(255,224,150,.08), inset 0 -3px 7px rgba(0,0,0,.48), inset 0 0 12px rgba(255,184,57,.055), 0 2px 5px rgba(0,0,0,.28), 0 0 10px rgba(255,184,57,.09);
+}
+body.razzle-active .status-center { border-color: rgba(239,190,104,.22); }
+body.razzle-active .header-roll-status,
+body.razzle-active .roll-text-display {
+  color: #f2c879;
+  text-shadow: 0 0 9px rgba(245,190,89,.4);
+}
+/* Purple push values become muted antique gold only during the bonus. */
+body.razzle-active .tile.payout-push .tile-payout,
+body.razzle-active .tile.payout-1 .tile-payout,
+body.razzle-active .tile.payout-1x .tile-payout {
+  color: #987a4b !important;
+  text-shadow: 0 0 5px rgba(191,146,74,.18) !important;
+}
+body.razzle-active .header-roll-status.bonus-spin-award {
+  color: #ffdda0;
+  font-family: 'Inter', sans-serif;
+  font-size: 2.7rem !important;
+  font-weight: 400;
+  letter-spacing: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: 100%;
+  line-height: 1;
+  gap: .15rem;
+  animation: bonus-spin-bings 1.05s linear both;
+}
+body.razzle-active .status-center.bonus-award-screen { align-items: center; }
+body.razzle-active .status-center.bonus-award-screen {
+  animation: bonus-award-screen-flash 1.35s ease-out both;
+}
+@keyframes bonus-award-screen-flash {
+  0%, 32%, 64%, 100% { border-color: rgba(239,190,104,.22); box-shadow: inset 0 0 0 2px rgba(0,0,0,.68), 0 0 8px rgba(255,184,57,.08); }
+  16%, 48%, 82% { border-color: rgba(255,231,166,.9); box-shadow: inset 0 0 16px rgba(255,203,94,.2), 0 0 26px rgba(255,203,94,.65); }
+}
+body.razzle-active .header-roll-status.bonus-spin-award::before { content: '↑'; font-size: .72em; font-weight: 400; }
+body.razzle-active .header-roll-status.bonus-spin-award::after { content: none; }
+@keyframes bonus-spin-bings {
+  0%, 14%, 33%, 52%, 71%, 100% { opacity: 1; text-shadow: 0 0 12px rgba(255,204,110,.62); }
+  7%, 26%, 45% { opacity: .18; text-shadow: none; }
+  83% { opacity: 1; text-shadow: 0 0 17px rgba(255,204,110,.72); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.razzle-active #game-container,
+  body.razzle-active .main-container::after,
+  body.razzle-active .header-roll-status.bonus-spin-award { animation: none !important; }
+}
+/* Bonus lighting replaces lime; the physical tile and endcap makeup stays intact. */
+body.razzle-active .tile.payout-win .tile-payout,
+body.razzle-active .tile.winning-tile .tile-payout,
+body.razzle-active .tile:not(.payout-loss):not(.losing-tile):not(.payout-push):not(.payout-1):not(.payout-1x) .tile-payout,
+body.razzle-active .text-win {
+  color: #f2c879 !important;
+  text-shadow: 0 0 7px rgba(245,190,89,.3);
+}
+body.razzle-active .status-led {
+  background: radial-gradient(circle, #ffe5a5 0%, #e9ba65 40%, #a7752c 100%);
+  box-shadow: 0 0 7px rgba(241,187,88,.65);
+}
+body.razzle-active #payoutBoardGrid .tile.dazzle-double-up .tile-payout {
+  color: #f2c879 !important;
+}
+body.razzle-active .roll-screen {
+  border-color: rgba(239,190,104,.48) !important;
+  box-shadow: 0 0 22px rgba(255,184,57,.26), inset 0 0 16px rgba(255,184,57,.08) !important;
+}
+body.razzle-active .roll-screen::after { border-color: rgba(255,205,116,.18); }
+body.razzle-active .dice-chip:not(.empty),
+.dice-chip.bonus-metal:not(.empty) {
+  --bonus-light: #e8c87a;
+  --bonus-metal: #b98538;
+  --bonus-shadow: #82501f;
+  color: #080808;
+  background:
+    radial-gradient(circle at 30% 21%, rgba(255,241,190,.9) 0 4%, transparent 32%),
+    radial-gradient(ellipse at 28% 75%, rgba(94,49,12,.34) 0, transparent 43%),
+    radial-gradient(ellipse at 79% 80%, rgba(35,21,9,.48) 0, transparent 48%),
+    radial-gradient(circle at 34% 24%, var(--bonus-light) 0%, var(--bonus-metal) 45%, var(--bonus-shadow) 79%, #281a0e 100%) !important;
+  border-color: rgba(52,33,14,.82) !important;
+  box-shadow: 0 7px 14px rgba(0,0,0,.46), 0 0 13px rgba(224,158,57,.32), inset 0 1px 2px rgba(255,234,171,.34) !important;
+}
+body.razzle-active .dice-chip.num-1, .dice-chip.bonus-metal.num-1 { --bonus-light: #d9bd82; --bonus-metal: #8c682f; --bonus-shadow: #513b23; }
+body.razzle-active .dice-chip.num-2, .dice-chip.bonus-metal.num-2 { --bonus-light: #f2d797; --bonus-metal: #c79b4d; --bonus-shadow: #785125; }
+body.razzle-active .dice-chip.num-3, .dice-chip.bonus-metal.num-3 { --bonus-light: #d8cbb0; --bonus-metal: #a99a80; --bonus-shadow: #665949; }
+body.razzle-active .dice-chip.num-4, .dice-chip.bonus-metal.num-4 { --bonus-light: #efd29a; --bonus-metal: #b48b56; --bonus-shadow: #654827; }
+body.razzle-active .dice-chip.num-5, .dice-chip.bonus-metal.num-5 { --bonus-light: #f2dda7; --bonus-metal: #d0b370; --bonus-shadow: #776039; }
+body.razzle-active .dice-chip.num-6, .dice-chip.bonus-metal.num-6 { --bonus-light: #d6c8ac; --bonus-metal: #958568; --bonus-shadow: #524c40; }
+body.razzle-active .dice-chip:not(.empty)::after,
+.dice-chip.bonus-metal:not(.empty)::after {
+  background: linear-gradient(90deg, transparent 0 42%, rgba(255,230,164,.1) 48%, rgba(255,241,195,.28) 50%, transparent 58%);
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  box-shadow: inset 0 0 9px rgba(48,26,8,.16);
+}
+body.razzle-active:not(.battery-saver):not(.no-pulse-effects) .dice-chip:not(.empty)::after,
+body:not(.battery-saver):not(.no-pulse-effects) .dice-chip.bonus-metal:not(.empty)::after {
+  animation: bonus-ball-glare 6s ease-in-out infinite;
+}
+@keyframes bonus-ball-glare {
+  0%, 62% { background-position: 100% 0; }
+  78%, 100% { background-position: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.razzle-active .dice-chip:not(.empty)::after,
+  .dice-chip.bonus-metal:not(.empty)::after { animation: none !important; }
+}
+body.razzle-active .dice-chip:not(.empty) .chip-number,
+.dice-chip.bonus-metal:not(.empty) .chip-number {
+  color: #070707;
+  text-shadow: 0 1px 1px rgba(255,230,164,.5);
+}
+/* The result is held in gold. On dismissal, only lighting fades; layout stays put. */
+body.razzle-theme-exit #game-container {
+  animation: razzle-lights-out 950ms ease-in-out both !important;
+}
+@keyframes razzle-lights-out {
+  0% { filter: brightness(1); }
+  38%, 58% { filter: brightness(.1); }
+  100% { filter: brightness(1); }
+}
+body.no-pulse-effects.razzle-theme-exit #game-container,
+body.battery-saver.razzle-theme-exit #game-container { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  body.razzle-theme-exit #game-container { animation: none !important; }
+}
+body.razzle-theme-exit #game-container,
+body.razzle-theme-exit .main-container,
+body.razzle-theme-exit .main-container::before,
+body.razzle-theme-exit .unified-board,
+body.razzle-theme-exit .unified-board::after,
+body.razzle-theme-exit .control-bar,
+body.razzle-theme-exit .control-bar::after,
+body.razzle-theme-exit .main-footer,
+body.razzle-theme-exit .main-footer::after,
+body.razzle-theme-exit #payoutBoardGrid,
+body.razzle-theme-exit .roll-screen,
+body.razzle-theme-exit .status-box,
+body.razzle-theme-exit .tile,
+body.razzle-theme-exit .status-led {
+  transition: color 650ms ease, border-color 650ms ease, box-shadow 650ms ease, background-color 650ms ease, filter 650ms ease !important;
+}
+body.razzle-theme-exit .main-container.purple-glow-pulse,
+body.razzle-theme-exit #payoutBoardGrid {
+  animation: none !important;
+}
+body.razzle-theme-exit .tile-payout,
+body.razzle-theme-exit #winAmountDisplay {
+  transition: color 650ms ease, text-shadow 650ms ease !important;
+}
+body.razzle-active #turboButton,
+body.razzle-active #autoplayButton {
+  color: #ffe3a5;
+  background: linear-gradient(145deg, #49351b, #21190f);
+  border-color: rgba(255,194,74,.45);
+  box-shadow: inset 0 1px 0 rgba(255,230,169,.17), 0 0 13px rgba(255,184,57,.25);
+}
+body.razzle-active #turboButton.turbo-stage-one {
+  background: conic-gradient(from -90deg, #bb8429 0deg 180deg, #332718 180deg 360deg);
+}
+body.razzle-active #turboButton.turbo-stage-two,
+body.razzle-active #autoplayButton.active {
+  background: linear-gradient(145deg, #a47121, #4b3214);
+  box-shadow: inset 0 1px 0 rgba(255,230,169,.23), 0 0 17px rgba(255,184,57,.38);
+}
+body.razzle-active #autoplayBadge {
+  color: #3a2507;
+  background: linear-gradient(145deg, #ffe2a0, #d99b34);
+  border-color: rgba(255,217,140,.65);
+}
+#rollButton.razzle-launch {
+  color: #2d1b05 !important;
+  background: radial-gradient(circle at 24% 27%, rgba(255,245,204,.9) 0 2px, transparent 8px), radial-gradient(circle at 72% 68%, rgba(119,68,14,.28) 0 5px, transparent 17px), repeating-conic-gradient(from 20deg, rgba(255,234,179,.13) 0deg 7deg, rgba(88,50,10,.08) 8deg 15deg), linear-gradient(145deg, #e8bc70, #bd8131 55%, #6d451a) !important;
+  box-shadow: inset 0 3px 5px rgba(255,246,209,.5), inset 0 -8px 11px rgba(68,39,8,.45), 0 0 0 2px rgba(222,171,82,.65), 0 0 23px rgba(255,184,57,.47) !important;
+}
+body.razzle-active:not(.no-pulse-effects):not(.battery-saver) #rollButton.razzle-launch::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: repeating-conic-gradient(from 0deg, rgba(255,234,177,.22) 0deg 6deg, transparent 8deg 24deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 55%, #000 73%);
+  mask: radial-gradient(circle, transparent 0 55%, #000 73%);
+  animation: razzle-play-orbit 13s linear infinite;
+}
+@keyframes razzle-play-orbit { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  #rollButton.razzle-launch::before { animation: none !important; }
+}
+#rollButton.razzle-launch:disabled {
+  opacity: 1;
+}
+#autoplayCountdown.razzle-auto-indicator {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  color: #4a2d07;
+  font-family: 'Segoe UI Symbol', sans-serif;
+  font-size: 2.15rem;
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow: 0 1px 0 rgba(255,241,198,.7);
+}
+#autoplayCountdown.razzle-auto-indicator:not(.razzle-auto-number) {
+  transform: translate(0, -2px);
+}
+#autoplayCountdown.razzle-auto-indicator.razzle-auto-number {
+  font-size: 2.35rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  padding-bottom: 3px;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  animation: razzle-count-reveal .26s ease-out both;
+}
+@keyframes razzle-count-reveal {
+  from { opacity: .35; transform: scale(.88); }
+  to { opacity: 1; transform: scale(1); }
+}
+#rollButton.razzle-launch.razzle-ready {
+  animation: razzle-play-pulse .9s ease-in-out infinite;
+}
+#rollButton.razzle-launch.razzle-reengage {
+  animation: razzle-reengage .38s cubic-bezier(.22,.8,.2,1) both;
+}
+#razzleRollCount {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 3px;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  font-size: 2.35rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 0 rgba(255,244,206,.65), 0 3px 7px rgba(91,51,4,.2);
+}
+#razzleRollCount.hidden {
+  display: none;
+}
+@keyframes razzle-play-pulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.09); filter: brightness(1.12); }
+}
+@keyframes razzle-reengage {
+  0% { transform: translateY(0) scale(1); }
+  38% { transform: translateY(3px) scale(.91); }
+  76% { transform: translateY(-1px) scale(1.035); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes razzle-board-breath {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.1); }
+}
+.text-win { color: var(--lime-accent) !important; }
+.text-loss { color: #ef4444 !important; }
+.text-jackpot { color: #fbbf24 !important; }
+
+#winAmountDisplay.bonus-payout-value {
+  color: #e6e8ec !important;
+  animation: bonus-payout-flash .8s ease-out 1;
+}
+@keyframes bonus-payout-flash {
+  0%, 60% { text-shadow: 0 0 14px rgba(255,190,72,.8); }
+  100% { text-shadow: none; }
+}
+.text-neutral { color: var(--text-neutral) !important; }
+.text-push { color: #d7b6ff !important; }
+
+/* Value cascade: preserves the existing keycap makeup. */
+.tile.value-release,
+.tile.value-pass,
+.tile.value-pop,
+.tile.value-lock {
+  transform-origin: center bottom;
+}
+
+/* The value cascade owns the tile motion while the board is idle. */
+body:not(.game-active) #payoutBoardGrid .tile.value-release {
+  animation: value-release 430ms cubic-bezier(.22,.8,.2,1) both !important;
+}
+
+body:not(.game-active) #payoutBoardGrid .tile.value-pop {
+  animation: value-pop 220ms cubic-bezier(.18,.9,.22,1.08) both !important;
+}
+
+body:not(.game-active) #payoutBoardGrid .tile.value-pass {
+  animation: value-pass 420ms ease-out both !important;
+}
+
+body:not(.game-active) #payoutBoardGrid .tile.value-lock {
+  animation: none !important;
+}
+
+body.game-active #payoutBoardGrid .tile.value-release,
+body.game-active #payoutBoardGrid .tile.value-pass,
+body.game-active #payoutBoardGrid .tile.value-pop,
+body.game-active #payoutBoardGrid .tile.value-lock,
+body.game-active #payoutBoardGrid .tile.value-rest-pulse,
+body.game-active #payoutBoardGrid .tile.idle-showcase {
+  animation: none !important;
+  transform: none !important;
+}
+
+.tile.value-release {
+  animation: value-release 430ms cubic-bezier(.22,.8,.2,1) both;
+  box-shadow:
+    0 12px 22px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+.tile.value-pop {
+  animation: value-pop 220ms cubic-bezier(.18,.9,.22,1.08) both;
+  box-shadow:
+    0 12px 24px rgba(0,0,0,.34),
+    0 11px 18px var(--value-glow),
+    0 16px 28px color-mix(in srgb, var(--value-glow) 72%, transparent);
+  transform: translateY(-2px) scale(1.018);
+}
+
+.tile.value-pass {
+  animation: value-pass 420ms ease-out both;
+  box-shadow: 0 9px 15px rgba(0,0,0,.24), 0 8px 14px var(--value-glow);
+}
+
+.tile.value-lock {
+  border-color: color-mix(in srgb, var(--value-hue) 55%, transparent);
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.42),
+    0 9px 15px var(--value-glow);
+  transform: translateY(-2px);
+}
+
+.tile.value-lock::after {
+  opacity: .45;
+  border-color: color-mix(in srgb, var(--value-hue) 45%, transparent);
+  box-shadow: 0 8px 14px var(--value-glow);
+}
+
+/* Only the 10/46 and 11/45 pairs have a resting glow. */
+.tile.special-pair-glow::after {
+  opacity: .7;
+  border-color: transparent;
+  box-shadow: 0 9px 16px var(--value-glow);
+}
+
+.tile.value-rest-pulse {
+  animation: value-rest-pulse 2.8s ease-in-out infinite !important;
+}
+
+.tile.idle-showcase {
+  animation: idle-showcase 620ms cubic-bezier(.2,.78,.2,1) both !important;
+  border-color: color-mix(in srgb, var(--value-hue) 45%, transparent) !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,.36), 0 9px 20px var(--value-glow) !important;
+}
+
+@keyframes value-release {
+  0%   { transform: translateY(0); }
+  18%  { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes value-pop {
+  0%   { transform: translateY(0); }
+  72%  { transform: translateY(-2px) scale(1.012); }
+  100% { transform: translateY(-2px) scale(1.008); }
+}
+
+@keyframes value-pass {
+  0%, 100% { transform: translateY(0); }
+  42% { transform: translateY(-1px); }
+}
+
+@keyframes value-rest-pulse {
+  0%, 100% { transform: translateY(0); box-shadow: 0 8px 20px rgba(0,0,0,.56); }
+  50% { transform: translateY(-1px); box-shadow: 0 10px 19px rgba(0,0,0,.46), 0 7px 12px var(--value-glow); }
+}
+
+@keyframes idle-showcase {
+  0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+  44% { transform: translateY(-3px) scale(1.025); filter: brightness(1.12); }
+}
+
+/* Idle board: never draw a white rim, regardless of legacy tile states. */
+#payoutBoardGrid .tile {
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,.56) !important;
+}
+
+#payoutBoardGrid .tile::before {
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+
+#payoutBoardGrid .tile::after {
+  border-color: transparent !important;
+  background: none !important;
+  box-shadow: 0 6px 12px var(--value-glow, rgba(174,129,255,.18)) !important;
+  opacity: .56 !important;
+}
+
+#payoutBoardGrid .tile.idle-showcase {
+  box-shadow: 0 10px 20px rgba(0,0,0,.36), 0 9px 20px var(--value-glow) !important;
+}
+
+/* Keep the completed result purple after a round, without a rim or motion. */
+body:not(.game-active) #payoutBoardGrid .tile.highlight {
+  animation: none !important;
+  transform: none !important;
+  border-color: transparent !important;
+  background: radial-gradient(circle at center, rgba(121,63,168,.32), rgba(121,63,168,.14) 60%, transparent 85%);
+}
+
+#payoutBoardGrid .tile.idle-feature {
+  animation: idle-feature 1.7s ease-in-out infinite !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,.42), 0 8px 17px var(--value-glow) !important;
+}
+
+#payoutBoardGrid .tile.idle-ping {
+  animation: idle-ping 1.8s cubic-bezier(.22,.61,.36,1) both !important;
+  box-shadow: 0 9px 18px rgba(0,0,0,.34), 0 8px 18px var(--value-glow) !important;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* The two 29 endcaps sit outside the grid only for the LED layout. */
+
+/* First-stage Turbo: one quick coloured under-shine announces a new spin. */
+#payoutBoardGrid .tile.turbo-spin-shine::after {
+  opacity: 0.9 !important;
+  box-shadow: 0 9px 17px var(--value-glow, rgba(174,129,255,.22)) !important;
+  transition: opacity 260ms ease-out, box-shadow 260ms ease-out;
+}
+
+/* During an idle glow, the multiplier is the hero—not the sum number. */
+#payoutBoardGrid .tile.idle-ping .tile-payout {
+  animation: idle-payout-ping 1.8s cubic-bezier(.22,.61,.36,1) both !important;
+  transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+#payoutBoardGrid .tile.idle-ping .tile-sum {
+  animation: idle-sum-ping 1.8s cubic-bezier(.22,.61,.36,1) both !important;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+#payoutBoardGrid .tile.idle-feature .tile-payout {
+  transform: scale(1.1) !important;
+}
+
+/* High-value idle pings stay purple; gold is reserved for Razzle mode. */
+#payoutBoardGrid .tile.idle-ping.value-hot .tile-payout,
+#payoutBoardGrid .tile.idle-ping.value-elite .tile-payout {
+  color: #a8ff7f !important;
+  filter: drop-shadow(0 3px 7px rgba(184,145,232,.28)) !important;
+}
+
+/* The featured value remains quietly marked while the next idle pings play. */
+#payoutBoardGrid .tile.idle-feature-settled {
+  border-color: color-mix(in srgb, var(--value-hue) 42%, transparent) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,.5), 0 6px 13px var(--value-glow) !important;
+}
+
+/* The idle board remains alive without drawing any tile rim. */
+body:not(.game-active) .roll-screen {
+  animation: roll-area-ambience 6.5s ease-in-out infinite;
+}
+
+body:not(.game-active) .dice-chip {
+  filter: grayscale(.62) brightness(.72);
+}
+
+@keyframes roll-area-ambience {
+  0%, 100% { box-shadow: 0 8px 20px rgba(0,0,0,.56), 0 0 0 rgba(168,255,127,0); }
+  50% { box-shadow: 0 8px 20px rgba(0,0,0,.56), 0 0 18px rgba(168,255,127,.11); }
+}
+
+@keyframes idle-feature {
+  0%, 100% { transform: translateY(-2px); filter: brightness(1); }
+  50% { transform: translateY(-3px); filter: brightness(1.08); }
+}
+
+@keyframes idle-ping {
+  0%, 18% { transform: translate3d(0,0,0); }
+  56% { transform: translate3d(0,-3px,0); }
+  100% { transform: translate3d(0,0,0); }
+}
+
+@keyframes idle-payout-ping {
+  0%, 18% { transform: scale(1); }
+  56% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+@keyframes idle-sum-ping {
+  0%, 18% { transform: scale(1); }
+  56% { transform: scale(.975); }
+  100% { transform: scale(1); }
+}
+
+/* Result state intentionally wins over the generic no-rim idle safeguard. */
+#payoutBoardGrid .tile.highlight {
+  border-color: rgba(154,99,212,.92) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 1px rgba(154,99,212,.7), 0 9px 20px rgba(0,0,0,.46), 0 0 15px rgba(121,63,168,.34) !important;
+}
+
+/* The two 29 endcaps use the same settled result treatment as board tiles. */
+
+/* Bonus result glow uses the same gold light as the frame, with no new rim or scale. */
+body.razzle-active #payoutBoardGrid .tile.highlight {
+  animation: none !important;
+  transform: none !important;
+  border-color: transparent !important;
+  background: linear-gradient(180deg, #0a0a0c 0%, #060607 100%);
+  box-shadow: 0 9px 20px rgba(0,0,0,.46), 0 0 17px rgba(255,184,57,.38) !important;
+}
+/* Both 29 endcaps retain the same graphite physical key in Razzle. */
+/* Trigger identity is light only: no extra border, changed material or sizing. */
+#payoutBoardGrid .trigger-halo {
+  --trigger-light: 166, 108, 222;
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(ellipse 78% 30% at 50% 0%, rgba(var(--trigger-light), .16), transparent 100%);
+  box-shadow: inset 0 2px 5px -2px rgba(var(--trigger-light), .58), inset 2px 0 5px -3px rgba(var(--trigger-light), .26), inset -2px 0 5px -3px rgba(var(--trigger-light), .26);
+  opacity: 1;
+  transition: opacity 600ms ease;
+}
+body.razzle-active #payoutBoardGrid .trigger-halo { --trigger-light: 230, 175, 75; }
+body.booting:not(.boot-trigger-primed) #payoutBoardGrid .trigger-halo { opacity: 0; }
+#payoutBoardGrid .trigger-title {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  fill: #b78bdd;
+  font-family: Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+  opacity: .85;
+  transition: opacity 600ms ease, fill 650ms ease;
+}
+body.razzle-active #payoutBoardGrid .trigger-title { fill: #dfb96f; }
+body.booting:not(.boot-trigger-primed) #payoutBoardGrid .trigger-title { opacity: 0; }
+#payoutBoardGrid .trigger-title-still { display: none; }
+body:is(.battery-saver, .no-pulse-effects) #payoutBoardGrid .trigger-title-moving { display: none; }
+body:is(.battery-saver, .no-pulse-effects) #payoutBoardGrid .trigger-title-still { display: block; }
+@media (prefers-reduced-motion: reduce) {
+  #payoutBoardGrid .trigger-title-moving { display: none; }
+  #payoutBoardGrid .trigger-title-still { display: block; }
+}
+body:not(.game-active) #payoutBoardGrid .tile[data-sum="29"]:not(.highlight):not(.idle-ping)::after {
+  box-shadow: 0 3px 7px rgba(0,0,0,.28);
+}
+@keyframes bonus-retrigger-number {
+  0%, 32%, 64%, 100% { color: #e4e6eb; text-shadow: none; }
+  16%, 48%, 82% { color: #ffe0a0; text-shadow: 0 0 15px rgba(255,202,96,.85); }
+}
+body.no-pulse-effects.razzle-active .status-center.bonus-award-screen,
+body.battery-saver.razzle-active .status-center.bonus-award-screen { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  body.razzle-active .status-center.bonus-award-screen { animation: none !important; }
+}
+
+
+/* Lower features stay absent until expansion completes, then reveal individually. */
+body.booting .control-bar > *,
+body.booting .main-footer > * { opacity: 1; transition: none; }
+body.booting .control-bar .stat-label,
+body.booting .main-footer img { animation: none !important; opacity: 1; }
+body.booting .control-bar .stat-value,
+body.booting .control-bar .win-mult { animation: none !important; color: #fff; }
+body.booting .control-bar .control-stat,
+body.booting .control-bar .bet-readout,
+body.booting .control-bar button,
+body.booting .main-footer button,
+body.booting .main-footer img {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+body.booting .control-bar .bet-control { opacity: 1; visibility: visible; }
+body.booting .control-bar .boot-feature-visible,
+body.booting .main-footer .boot-feature-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 180ms ease;
+}
+
+/* The shared lamp test is the cue that opens the board. */
+body.booting.boot-trigger-primed:not(.boot-final-ignition) #payoutBoardGrid .tile[data-sum="29"] .tile-sum {
+  animation-duration: var(--boot-cue-duration, 1300ms) !important;
+}
+body.booting.boot-trigger-primed #rollResultsDisplay .dice-chip.empty {
+  animation: boot-socket-cue var(--boot-cue-duration, 1300ms) steps(1,end) both !important;
+}
+@keyframes boot-socket-cue {
+  0%, 9%, 34%, 53%, 77% { opacity: .5; border-color: rgba(115,64,163,.24); box-shadow: inset 0 4px 10px rgba(0,0,0,.95); }
+  5%, 22%, 43%, 64%, 88%, 100% { opacity: 1; border-color: #d7ed9b; box-shadow: inset 0 0 13px rgba(202,235,137,.35), 0 0 10px rgba(181,134,235,.5); }
+}
+#payoutBoardGrid .trigger-title { fill: #e6c7ff; font-weight: 700; letter-spacing: .7px; opacity: 1; }
+#payoutBoardGrid .trigger-track { fill: none; stroke: #ac77d5; stroke-width: .8; opacity: .75; }
+body.razzle-active #payoutBoardGrid .trigger-track { stroke: #e7be70; }
+body.booting.boot-rims-lit:not(.game-active) .roll-screen { border-color: #9361be; box-shadow: inset 0 0 12px rgba(0,0,0,.72), 0 0 12px rgba(147,97,190,.25); }
+body.booting.boot-rims-lit:not(.game-active) .roll-screen::after { opacity: 1; border-color: rgba(210,228,125,.5); }
+body.booting .unified-board, body.booting .roll-screen, body.booting .roll-screen::after { transition-duration: 380ms; }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-trigger-primed #rollResultsDisplay .dice-chip.empty { animation: none !important; opacity: 1 !important; border-color: #b5cc8b; }
+}
+
+body.booting.boot-final-ignition .control-bar .stat-value,
+body.booting.boot-final-ignition .control-bar .win-mult {
+  animation: none !important;
+  color: #fff;
+}
+
+/* Each drop exposes exactly one additional fixed grid row. */
+body.booting #payoutBoardGrid,
+body.booting.boot-opening #payoutBoardGrid {
+  height: calc(var(--board-row-height) * var(--boot-visible-rows, 1) + var(--board-gap) * (var(--boot-visible-rows, 1) - 1) + 1rem + 6px);
+  max-height: none;
+  overflow: hidden;
+  transition: height var(--boot-drop-duration, 260ms) cubic-bezier(.25,.7,.3,1);
+}
+body.booting.boot-under-glow #payoutBoardGrid { overflow: visible; }
+body.booting.boot-trigger-primed #rollResultsDisplay .dice-chip.empty {
+  animation: boot-socket-random var(--socket-flash-duration, 150ms) steps(1,end) var(--socket-flash-delay, 0ms) 4 both !important;
+}
+@keyframes boot-socket-random {
+  0%, 100% { filter: brightness(.38); opacity: .32; border-color: #33213e; box-shadow: inset 0 4px 10px #000; }
+  35%, 72% { filter: brightness(1.8); opacity: 1; border-color: #e6f7b5; box-shadow: inset 0 0 16px rgba(216,244,161,.52), 0 0 13px rgba(183,134,238,.65); }
+}
+#payoutBoardGrid .trigger-title { font-size: 11px; letter-spacing: .2px; fill: #f5eaff; }
+#payoutBoardGrid .trigger-track { stroke: #b58bda; opacity: .5; stroke-width: .65; }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-trigger-primed #rollResultsDisplay .dice-chip.empty { animation: none !important; opacity: 1 !important; }
+}
+
+#payoutBoardGrid .trigger-readable rect { fill: #0b0710; }
+#payoutBoardGrid .trigger-readable text { fill: #f5eaff; font-size: 11px; font-weight: 700; letter-spacing: .5px; }
+body.razzle-active #payoutBoardGrid .trigger-readable text { fill: #ffe2a9; }
+
+/* The lower shells join only after the board has dropped fully open. */
+body.booting:not(.boot-under-glow) .control-bar,
+body.booting:not(.boot-under-glow) .main-footer { display: none; }
+body.booting .control-bar .boot-feature-visible,
+body.booting .main-footer .boot-feature-visible {
+  animation: boot-feature-flicker 430ms steps(1,end) infinite !important;
+  animation-delay: var(--feature-flash-delay, 0ms) !important;
+}
+@keyframes boot-feature-flicker {
+  0%, 24%, 61%, 100% { opacity: 1; }
+  12%, 48% { opacity: .28; }
+  77% { opacity: .65; }
+}
+body.booting.boot-trigger-primed #rollResultsDisplay .dice-chip.empty {
+  animation-iteration-count: infinite !important;
+}
+body.booting.boot-trigger-primed #payoutBoardGrid .tile[data-sum="29"] .tile-sum {
+  animation: boot-trigger-lamps 650ms steps(1,end) infinite !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting .control-bar .boot-feature-visible,
+  body.booting .main-footer .boot-feature-visible,
+  body.booting.boot-trigger-primed #payoutBoardGrid .tile[data-sum="29"] .tile-sum { animation: none !important; opacity: 1; }
+}
+
+/* Startup light travels in smooth waves while each new feature joins. */
+body.booting .control-bar .boot-feature-visible,
+body.booting .main-footer .boot-feature-visible {
+  animation: boot-gradient-light 850ms ease-in-out infinite !important;
+  animation-delay: var(--feature-flash-delay, 0ms) !important;
+}
+@keyframes boot-gradient-light {
+  0%, 100% { opacity: .4; filter: brightness(.7); }
+  45% { opacity: 1; filter: brightness(1.3); }
+  70% { opacity: .75; filter: brightness(1); }
+}
+body.booting.boot-center-lit .status-center,
+body.booting.boot-inner-lit:not(.game-active) .roll-screen {
+  background-image: linear-gradient(110deg, #070709 12%, #291637 33%, #506139 49%, #291637 65%, #070709 86%);
+  background-size: 320% 100%;
+  animation: boot-screen-gradient 1400ms ease-in-out infinite !important;
+}
+@keyframes boot-screen-gradient {
+  0%, 100% { background-position: 100% 0; box-shadow: inset 0 0 12px rgba(143,93,190,.15), 0 0 8px rgba(143,93,190,.12); }
+  50% { background-position: 0 0; box-shadow: inset 0 0 16px rgba(210,235,157,.3), 0 0 14px rgba(159,107,205,.3); }
+}
+body.booting.boot-final-ignition #payoutBoardGrid .tile .tile-sum,
+body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-sum {
+  color: #e4e7dd;
+  animation: boot-gradient-light 950ms ease-in-out infinite !important;
+  animation-delay: var(--boot-delay, 0ms) !important;
+}
+body.booting.boot-multis-igniting #payoutBoardGrid .tile .tile-payout,
+body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-payout {
+  animation: boot-gradient-light 950ms ease-in-out infinite !important;
+  animation-delay: var(--boot-delay, 0ms) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting .control-bar .boot-feature-visible,
+  body.booting .main-footer .boot-feature-visible,
+  body.booting.boot-center-lit .status-center,
+  body.booting.boot-inner-lit:not(.game-active) .roll-screen,
+  body.booting.boot-final-ignition #payoutBoardGrid .tile .tile-sum,
+  body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-sum,
+  body.booting.boot-multis-igniting #payoutBoardGrid .tile .tile-payout,
+  body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-payout { animation: none !important; }
+}
+
+/* All three header screens share the startup gradient flash. */
+body.booting.boot-sides-lit .status-left,
+body.booting.boot-sides-lit .status-right {
+  background-image: linear-gradient(110deg, #070709 12%, #291637 33%, #506139 49%, #291637 65%, #070709 86%);
+  background-size: 320% 100%;
+  animation: boot-screen-gradient 1400ms ease-in-out infinite !important;
+}
+body.booting.boot-sides-lit .status-left { animation-delay: -220ms !important; }
+body.booting.boot-sides-lit .status-right { animation-delay: -440ms !important; }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-sides-lit .status-left,
+  body.booting.boot-sides-lit .status-right { animation: none !important; }
+}
+
+/* The lower cabinet answers the header lights after expansion. */
+body.booting.boot-under-glow #payoutBoardGrid .tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 20%, rgba(166,110,222,.32) 43%, rgba(209,239,155,.35) 52%, transparent 76%) !important;
+  background-size: 300% 100% !important;
+  opacity: .85 !important;
+  animation: boot-board-answer 1250ms ease-in-out infinite !important;
+  animation-delay: var(--boot-delay, 0ms) !important;
+}
+@keyframes boot-board-answer {
+  0%, 100% { background-position: 100% 0; filter: brightness(.55); }
+  50% { background-position: 0 0; filter: brightness(1.4); }
+}
+body.booting.boot-under-glow .control-bar::before,
+body.booting.boot-under-glow .main-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 15%, rgba(150,83,205,.23) 40%, rgba(205,237,150,.26) 52%, transparent 80%);
+  background-size: 300% 100%;
+  animation: boot-board-answer 1250ms ease-in-out infinite;
+}
+body.booting.boot-under-glow .main-footer::before { animation-delay: -625ms; }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-under-glow #payoutBoardGrid .tile::before,
+  body.booting.boot-under-glow .control-bar::before,
+  body.booting.boot-under-glow .main-footer::before { animation: none !important; background: none !important; }
+}
+
+/* One continuous light crosses the whole cabinet instead of restarting in each panel. */
+body.booting.boot-under-glow .main-container::after {
+  inset: 0;
+  padding: 0;
+  z-index: 10;
+  mask: none;
+  -webkit-mask: none;
+  background: linear-gradient(110deg, transparent 28%, rgba(161,104,212,.16) 43%, rgba(218,244,173,.26) 51%, rgba(161,104,212,.12) 60%, transparent 74%);
+  background-size: 350% 100%;
+  animation: boot-cabinet-flow var(--boot-flow-duration, 1400ms) ease-in-out infinite;
+}
+@keyframes boot-cabinet-flow {
+  0% { background-position: 100% 0; opacity: 0; }
+  20%, 75% { opacity: 1; }
+  100% { background-position: 0 0; opacity: 0; }
+}
+body.booting.boot-under-glow.boot-final-charge .main-container::after {
+  animation: boot-cabinet-finish var(--boot-finish-duration, 950ms) ease-in-out both;
+}
+@keyframes boot-cabinet-finish {
+  0% { background-position: 100% 0; opacity: 0; }
+  20%, 75% { opacity: 1; }
+  100% { background-position: 0 0; opacity: 0; }
+}
+body.booting.boot-under-glow #payoutBoardGrid .tile::before,
+body.booting.boot-under-glow .control-bar::before,
+body.booting.boot-under-glow .main-footer::before { animation: none !important; background: none !important; }
+body.booting.boot-under-glow.boot-center-lit .status-center,
+body.booting.boot-under-glow.boot-sides-lit .status-left,
+body.booting.boot-under-glow.boot-sides-lit .status-right,
+body.booting.boot-under-glow.boot-inner-lit:not(.game-active) .roll-screen {
+  animation: none !important;
+  background-image: none;
+}
+body.booting.boot-final-charge .main-container.purple-glow-pulse { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-under-glow .main-container::after { animation: none !important; opacity: 0; }
+}
+
+/* A little more edge light and underglow in normal play only. */
+body:not(.booting):not(.razzle-active) .top-header .status-box {
+  border-color: rgba(151,99,195,.48);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.62), inset 0 0 0 3px rgba(151,99,195,.2), inset 0 1px 1px rgba(255,255,255,.08), inset 0 -3px 7px rgba(0,0,0,.48), 0 2px 9px rgba(137,84,184,.2);
+}
+body:not(.booting):not(.razzle-active) .roll-screen {
+  border-color: rgba(155,104,202,.48);
+  box-shadow: inset 0 0 12px rgba(0,0,0,.72), 0 8px 20px rgba(0,0,0,.56), 0 0 14px rgba(145,91,190,.2);
+}
+body:not(.booting):not(.razzle-active):not(.game-active) .roll-screen {
+  animation-name: normal-roll-area-ambience;
+}
+@keyframes normal-roll-area-ambience {
+  0%, 100% { box-shadow: inset 0 0 10px rgba(145,91,190,.1), 0 8px 20px rgba(0,0,0,.56), 0 0 12px rgba(145,91,190,.17); }
+  50% { box-shadow: inset 0 0 12px rgba(145,91,190,.16), 0 8px 20px rgba(0,0,0,.56), 0 0 20px rgba(168,255,127,.2); }
+}
+body:not(.booting):not(.razzle-active) .dice-chip.empty {
+  border-color: rgba(156,108,199,.46);
+  box-shadow: inset 0 4px 10px rgba(0,0,0,.9), inset 0 0 10px rgba(155,106,198,.21), inset 0 0 0 1px rgba(188,143,222,.23), 0 0 9px rgba(145,91,190,.24);
+}
+body:not(.booting):not(.razzle-active):not(.game-active) .dice-chip {
+  filter: grayscale(.42) brightness(.95);
+}
+
+/* Number lamps keep flickering through the intro, independently of the glare. */
+body.booting.boot-final-ignition #payoutBoardGrid .tile .tile-sum,
+body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-sum {
+  animation: boot-live-number 530ms steps(1,end) infinite !important;
+  animation-delay: var(--boot-delay, 0ms) !important;
+}
+@keyframes boot-live-number {
+  0%, 21%, 46%, 79%, 100% { color: #eef0e7; opacity: 1; filter: brightness(1.25); }
+  10%, 63% { color: #19131f; opacity: 1; filter: brightness(.45); }
+  34%, 88% { color: #b38bd4; opacity: 1; filter: brightness(.8); }
+}
+body.booting.boot-multis-igniting #payoutBoardGrid .tile .tile-payout,
+body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-payout {
+  animation: boot-live-payout 470ms steps(1,end) infinite !important;
+  animation-delay: var(--boot-delay, 0ms) !important;
+}
+@keyframes boot-live-payout {
+  0%, 28%, 57%, 100% { opacity: 1; filter: brightness(1.5); }
+  12%, 72% { opacity: .25; filter: brightness(.2); }
+  40%, 87% { opacity: .7; filter: brightness(.75); }
+}
+body.booting.boot-under-glow #payoutBoardGrid .tile::after {
+  animation: boot-live-underlamp 610ms steps(1,end) infinite !important;
+  animation-delay: var(--boot-delay, 0ms) !important;
+}
+@keyframes boot-live-underlamp {
+  0%, 30%, 65%, 100% { filter: brightness(1.8); }
+  14%, 48%, 81% { filter: brightness(.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-final-ignition #payoutBoardGrid .tile .tile-sum,
+  body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-sum,
+  body.booting.boot-multis-igniting #payoutBoardGrid .tile .tile-payout,
+  body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-payout,
+  body.booting.boot-under-glow #payoutBoardGrid .tile::after { animation: none !important; }
+}
+
+/* A newly exposed row is already running its lamp test. */
+body.booting.boot-opening #payoutBoardGrid .tile .tile-sum,
+body.booting.boot-final-ignition #payoutBoardGrid .tile .tile-sum,
+body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-sum {
+  animation: boot-live-number 530ms steps(1,end) infinite !important;
+  animation-delay: calc(-1 * var(--boot-delay, 0ms)) !important;
+}
+body.booting.boot-opening #payoutBoardGrid .tile::after,
+body.booting.boot-under-glow #payoutBoardGrid .tile::after {
+  opacity: .56 !important;
+  animation: boot-live-underlamp 610ms steps(1,end) infinite !important;
+  animation-delay: calc(-1 * var(--boot-delay, 0ms)) !important;
+}
+body.booting.boot-multis-igniting #payoutBoardGrid .tile .tile-payout,
+body.booting.boot-multis-ready #payoutBoardGrid .tile .tile-payout {
+  animation-delay: calc(-1 * var(--boot-delay, 0ms)) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-opening #payoutBoardGrid .tile .tile-sum { animation: none !important; color: #eef0e7; }
+  body.booting.boot-opening #payoutBoardGrid .tile::after { animation: none !important; }
+}
+
+/* The lamp test starts before the tile underglow is introduced. */
+body.booting.boot-opening:not(.boot-under-glow) #payoutBoardGrid .tile::after {
+  opacity: 0 !important;
+  animation: none !important;
+}
+body.booting.boot-center-lit .top-header .status-box {
+  border-color: rgba(159,111,201,.48);
+  box-shadow: inset 0 0 0 1px rgba(162,115,203,.18), inset 0 -3px 7px rgba(0,0,0,.48), 0 0 7px rgba(145,91,190,.22) !important;
+}
+/* A narrow top highlight preserves depth without adding a bright outline. */
+#payoutBoardGrid > .tile {
+  box-shadow: inset 0 1px 0 rgba(199,175,221,.32), inset 0 2px 3px rgba(199,175,221,.06), inset 0 -7px 12px rgba(0,0,0,.25), 0 8px 20px rgba(0,0,0,.56) !important;
+}
+.unified-board { margin-bottom: .6rem; }
+.control-bar { margin-bottom: .6rem; }
+.control-bar, .main-footer {
+  box-shadow: inset 0 1px 0 rgba(193,156,219,.19), inset 0 -1px 0 rgba(0,0,0,.8), 0 0 0 1px rgba(169,120,205,.18), 0 5px 12px rgba(0,0,0,.48);
+}
+.bet-stepper {
+  top: 3px;
+  right: 3px;
+  height: calc(100% - 6px);
+  border-radius: 8px;
+  border: 1px solid rgba(187,146,218,.36);
+  box-shadow: 0 0 0 2px #09070c, inset 0 1px 0 rgba(255,255,255,.14);
+}
+.control-stats-right { padding-right: 38px; }
+/* An oversized terrain layer lets new crater groups drift in from different edges. */
+#rollButton:not(.razzle-launch)::before {
+  inset: -30%;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(51,65,77,.32) 0 5%, rgba(248,251,253,.24) 7%, transparent 11%),
+    radial-gradient(circle at 54% 15%, rgba(58,71,83,.25) 0 3%, rgba(248,251,253,.18) 5%, transparent 8%),
+    radial-gradient(circle at 82% 31%, rgba(48,62,74,.32) 0 7%, rgba(248,251,253,.22) 9%, transparent 13%),
+    radial-gradient(circle at 35% 46%, rgba(55,68,80,.3) 0 5%, rgba(245,250,253,.19) 7%, transparent 11%),
+    radial-gradient(circle at 65% 61%, rgba(47,61,74,.3) 0 8%, rgba(248,251,253,.2) 10%, transparent 14%),
+    radial-gradient(circle at 16% 77%, rgba(55,68,80,.26) 0 4%, rgba(245,250,253,.18) 6%, transparent 9%),
+    radial-gradient(circle at 45% 90%, rgba(51,65,77,.3) 0 6%, rgba(248,251,253,.2) 8%, transparent 12%),
+    radial-gradient(circle at 89% 86%, rgba(58,71,83,.26) 0 4%, rgba(248,251,253,.18) 6%, transparent 10%);
+}
+body:not(.no-pulse-effects):not(.battery-saver) #rollButton:not(.razzle-launch)::before {
+  animation: moon-terrain-wander 47s ease-in-out infinite alternate;
+}
+@keyframes moon-terrain-wander {
+  0% { transform: translate(-8%, 6%) rotate(-18deg); }
+  24% { transform: translate(8%, -10%) rotate(38deg); }
+  51% { transform: translate(-10%, -5%) rotate(-42deg); }
+  76% { transform: translate(6%, 9%) rotate(72deg); }
+  100% { transform: translate(10%, -7%) rotate(125deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body #rollButton:not(.razzle-launch)::before { animation: none !important; }
+}
+
+/* The header and both lower strips share one physical container size. */
+:root { --strip-height: 86px; --strip-gap: .6rem; }
+.top-header, .control-bar, .main-footer {
+  width: 100%;
+  height: var(--strip-height);
+  min-height: var(--strip-height);
+  box-sizing: border-box;
+  border: 3px solid rgba(139,83,182,.62);
+  border-radius: var(--panel-radius);
+  background-color: var(--cabinet-plastic);
+  box-shadow: inset 0 1px 0 rgba(211,181,234,.22), inset 0 3px 7px rgba(0,0,0,.8), inset 0 -1px 0 rgba(130,89,160,.2), 0 2px 0 #020203, 0 5px 12px rgba(0,0,0,.5);
+}
+.top-header { position: relative; padding: .45rem .6rem; margin-bottom: var(--strip-gap); }
+.control-bar { margin-bottom: var(--strip-gap); }
+.main-footer { display: flex; align-items: center; }
+.main-footer > div { width: 100%; }
+@media (max-width: 680px) {
+  .control-bar { height: auto; min-height: var(--strip-height); }
+}
+
+/* Controls sit flush in the lower strip, with a small readable bezel. */
+.top-header { border: 0; box-shadow: none; background-color: transparent; }
+.bet-stepper {
+  top: 0;
+  right: 0;
+  height: 100%;
+  border: 0;
+  border-left: 1px solid rgba(190,157,214,.45);
+  border-radius: 0 11px 11px 0;
+  box-shadow: inset 1px 0 0 rgba(222,197,240,.12), -2px 0 4px rgba(0,0,0,.45);
+}
+.control-stats-right { padding-right: 34px; }
+#rollButton { width: 110px; height: 110px; top: 0; border-color: #393c43; }
+.control-actions #turboButton,
+.control-actions #autoplayButton {
+  width: 58px;
+  height: 58px;
+  border: 3px solid #555962;
+  box-shadow: inset 0 1px 2px rgba(224,230,237,.19), inset 0 -3px 5px rgba(0,0,0,.4), 0 0 0 1px #101114, 0 5px 9px rgba(0,0,0,.5);
+}
+#autoplayIcon { width: 30px; height: 30px; }
+#turboButton > svg:first-child { width: 26px; height: 26px; }
+.control-actions #turboButton.active,
+.control-actions #autoplayButton.active { border-color: rgba(172,233,64,.7); }
+
+#rollButton { top: 1px; }
+.control-actions #turboButton:is(.turbo-stage-one, .turbo-stage-two) { border-color: rgba(172,233,64,.7); }
+
+/* A few last lamps settle independently before the idle ambience resumes. */
+body:not(.booting) #payoutBoardGrid .tile .tile-sum.boot-settling-pulse,
+body:not(.booting) #rollResultsDisplay .dice-chip.empty.boot-settling-pulse {
+  animation: boot-last-pulses 600ms ease-out both !important;
+  animation-delay: var(--settle-delay, 0ms) !important;
+}
+@keyframes boot-last-pulses {
+  0%, 100% { filter: brightness(1); }
+  16% { filter: brightness(1.8); }
+  34% { filter: brightness(.65); }
+  53% { filter: brightness(1.4); }
+  73% { filter: brightness(.85); }
+}
+.bet-stepper #increaseBetBtn,
+.bet-stepper #decreaseBetBtn {
+  color: #fff;
+  font-size: 1.45rem;
+  font-weight: 900;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0,0,0,.9);
+}
+#rollButton:not(.razzle-launch)::before {
+  inset: 0;
+  background: radial-gradient(circle at 12% 16%, rgba(53,66,78,.32) 0 2%, rgba(246,250,253,.22) 3%, transparent 4.3%),
+    radial-gradient(circle at 29% 9%, rgba(53,66,78,.32) 0 1%, rgba(246,250,253,.22) 2%, transparent 3.3%),
+    radial-gradient(circle at 47% 19%, rgba(53,66,78,.32) 0 1.5%, rgba(246,250,253,.22) 2.5%, transparent 3.8%),
+    radial-gradient(circle at 74% 11%, rgba(53,66,78,.32) 0 2%, rgba(246,250,253,.22) 3%, transparent 4.3%),
+    radial-gradient(circle at 92% 25%, rgba(53,66,78,.32) 0 1%, rgba(246,250,253,.22) 2%, transparent 3.3%),
+    radial-gradient(circle at 18% 37%, rgba(53,66,78,.32) 0 1.5%, rgba(246,250,253,.22) 2.5%, transparent 3.8%),
+    radial-gradient(circle at 40% 38%, rgba(53,66,78,.32) 0 1%, rgba(246,250,253,.22) 2%, transparent 3.3%),
+    radial-gradient(circle at 65% 32%, rgba(53,66,78,.32) 0 2.3%, rgba(246,250,253,.22) 3.3%, transparent 4.6%),
+    radial-gradient(circle at 83% 45%, rgba(53,66,78,.32) 0 1.2%, rgba(246,250,253,.22) 2.2%, transparent 3.5%),
+    radial-gradient(circle at 7% 61%, rgba(53,66,78,.32) 0 1%, rgba(246,250,253,.22) 2%, transparent 3.3%),
+    radial-gradient(circle at 32% 68%, rgba(53,66,78,.32) 0 2%, rgba(246,250,253,.22) 3%, transparent 4.3%),
+    radial-gradient(circle at 56% 57%, rgba(53,66,78,.32) 0 1.2%, rgba(246,250,253,.22) 2.2%, transparent 3.5%),
+    radial-gradient(circle at 73% 76%, rgba(53,66,78,.32) 0 1.5%, rgba(246,250,253,.22) 2.5%, transparent 3.8%),
+    radial-gradient(circle at 94% 69%, rgba(53,66,78,.32) 0 2%, rgba(246,250,253,.22) 3%, transparent 4.3%),
+    radial-gradient(circle at 17% 89%, rgba(53,66,78,.32) 0 1.8%, rgba(246,250,253,.22) 2.8%, transparent 4.1%),
+    radial-gradient(circle at 47% 91%, rgba(53,66,78,.32) 0 1%, rgba(246,250,253,.22) 2%, transparent 3.3%),
+    radial-gradient(circle at 62% 86%, rgba(53,66,78,.32) 0 1.3%, rgba(246,250,253,.22) 2.3%, transparent 3.5999999999999996%),
+    radial-gradient(circle at 88% 94%, rgba(53,66,78,.32) 0 1%, rgba(246,250,253,.22) 2%, transparent 3.3%);
+  background-size: 170% 170%;
+  -webkit-mask-image: radial-gradient(circle at center, transparent 0 22%, #000 35%);
+  mask-image: radial-gradient(circle at center, transparent 0 22%, #000 35%);
+}
+@keyframes moon-terrain-wander {
+  0% { transform: none; background-position: 0% 20%; }
+  24% { transform: none; background-position: 85% 0%; }
+  51% { transform: none; background-position: 25% 90%; }
+  76% { transform: none; background-position: 100% 40%; }
+  100% { transform: none; background-position: 10% 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body #payoutBoardGrid .tile .tile-sum.boot-settling-pulse,
+  body #rollResultsDisplay .dice-chip.empty.boot-settling-pulse { animation: none !important; }
+}
+
+/* Mixed lunar relief: large rim craters, small pits, and faint weathered ridges. */
+#rollButton:not(.razzle-launch)::before {
+  background:
+    radial-gradient(ellipse at 7% 13%, rgba(48,62,75,.34) 0 5.5%, rgba(76,89,101,.2) 6.2%, rgba(247,251,253,.28) 6.9%, transparent 8.3%),
+    radial-gradient(ellipse at 88% 17%, rgba(48,62,75,.34) 0 6.5%, rgba(76,89,101,.2) 7.2%, rgba(247,251,253,.28) 7.9%, transparent 9.3%),
+    radial-gradient(ellipse at 14% 84%, rgba(48,62,75,.34) 0 7%, rgba(76,89,101,.2) 7.7%, rgba(247,251,253,.28) 8.4%, transparent 9.8%),
+    radial-gradient(ellipse at 92% 83%, rgba(48,62,75,.34) 0 5%, rgba(76,89,101,.2) 5.7%, rgba(247,251,253,.28) 6.4%, transparent 7.8%),
+    radial-gradient(ellipse at 32% 5%, rgba(48,62,75,.34) 0 3.8%, rgba(76,89,101,.2) 4.5%, rgba(247,251,253,.28) 5.199999999999999%, transparent 6.6%),
+    radial-gradient(ellipse at 67% 94%, rgba(48,62,75,.34) 0 4.5%, rgba(76,89,101,.2) 5.2%, rgba(247,251,253,.28) 5.9%, transparent 7.3%),
+    radial-gradient(ellipse at 10% 47%, rgba(48,62,75,.34) 0 2%, rgba(76,89,101,.2) 2.7%, rgba(247,251,253,.28) 3.4%, transparent 4.8%),
+    radial-gradient(ellipse at 91% 53%, rgba(48,62,75,.34) 0 2.5%, rgba(76,89,101,.2) 3.2%, rgba(247,251,253,.28) 3.9%, transparent 5.3%),
+    radial-gradient(ellipse at 29% 24%, rgba(48,62,75,.34) 0 1.5%, rgba(76,89,101,.2) 2.2%, rgba(247,251,253,.28) 2.9%, transparent 4.3%),
+    radial-gradient(ellipse at 64% 12%, rgba(48,62,75,.34) 0 1%, rgba(76,89,101,.2) 1.7%, rgba(247,251,253,.28) 2.4%, transparent 3.8%),
+    radial-gradient(ellipse at 78% 36%, rgba(48,62,75,.34) 0 1.3%, rgba(76,89,101,.2) 2%, rgba(247,251,253,.28) 2.7%, transparent 4.1%),
+    radial-gradient(ellipse at 21% 65%, rgba(48,62,75,.34) 0 1.2%, rgba(76,89,101,.2) 1.9%, rgba(247,251,253,.28) 2.5999999999999996%, transparent 4%),
+    radial-gradient(ellipse at 49% 86%, rgba(48,62,75,.34) 0 1.5%, rgba(76,89,101,.2) 2.2%, rgba(247,251,253,.28) 2.9%, transparent 4.3%),
+    radial-gradient(ellipse at 73% 71%, rgba(48,62,75,.34) 0 1.4%, rgba(76,89,101,.2) 2.0999999999999996%, rgba(247,251,253,.28) 2.8%, transparent 4.199999999999999%),
+    radial-gradient(ellipse at 43% 17%, rgba(48,62,75,.34) 0 0.8%, rgba(76,89,101,.2) 1.5%, rgba(247,251,253,.28) 2.2%, transparent 3.5999999999999996%),
+    radial-gradient(ellipse at 15% 31%, rgba(48,62,75,.34) 0 0.9%, rgba(76,89,101,.2) 1.6%, rgba(247,251,253,.28) 2.3%, transparent 3.6999999999999997%),
+    radial-gradient(ellipse at 84% 63%, rgba(48,62,75,.34) 0 1%, rgba(76,89,101,.2) 1.7%, rgba(247,251,253,.28) 2.4%, transparent 3.8%),
+    radial-gradient(ellipse at 35% 78%, rgba(48,62,75,.34) 0 0.8%, rgba(76,89,101,.2) 1.5%, rgba(247,251,253,.28) 2.2%, transparent 3.5999999999999996%),
+    radial-gradient(ellipse at 59% 89%, rgba(48,62,75,.34) 0 0.7%, rgba(76,89,101,.2) 1.4%, rgba(247,251,253,.28) 2.0999999999999996%, transparent 3.5%),
+    radial-gradient(ellipse at 93% 36%, rgba(48,62,75,.34) 0 0.9%, rgba(76,89,101,.2) 1.6%, rgba(247,251,253,.28) 2.3%, transparent 3.6999999999999997%),
+    repeating-radial-gradient(ellipse at 5% 80%, transparent 0 9px, rgba(62,76,88,.08) 10px, rgba(244,249,252,.09) 11px, transparent 12px 19px),
+    repeating-linear-gradient(128deg, transparent 0 14px, rgba(67,81,93,.05) 15px, rgba(244,248,251,.07) 16px, transparent 17px 28px);
+  background-size: 135% 135%;
+  -webkit-mask-image: radial-gradient(circle at center, transparent 0 20%, rgba(0,0,0,.3) 30%, #000 46%);
+  mask-image: radial-gradient(circle at center, transparent 0 20%, rgba(0,0,0,.3) 30%, #000 46%);
+}
+
+/* Give currency readouts the space recovered from the control cluster. */
+.control-bar { column-gap: .35rem; }
+.control-actions { gap: .35rem; padding-inline: .2rem; }
+.control-stat { padding-inline: .25rem; }
+.control-stats-left .control-stat:last-child { padding-left: .45rem; }
+.control-stats-right .control-stat:first-child { padding-right: .45rem; }
+.control-stats-right { grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr); }
+.control-bar .stat-value { max-width: 100%; min-width: 0; white-space: nowrap; letter-spacing: 0; }
+
+/* Small optical adjustments around the central controls. */
+.control-stats-left { grid-template-columns: calc(50% + 6px) minmax(0, 1fr); }
+.control-stats-right { grid-template-columns: calc(32.5% + 6px) minmax(0, 1fr); }
+.control-actions #turboButton { left: -2px; }
+.control-actions #autoplayButton { left: 2px; }
+#rollButton { width: 112px; height: 112px; }
+
+/* The traveling light catches raised edges rather than laying over every gap. */
+body.booting.boot-under-glow .main-container::after {
+  inset: -2px;
+  padding: 3px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+body.booting.boot-under-glow #payoutBoardGrid .tile::before {
+  background: linear-gradient(110deg, transparent 20%, rgba(207,174,235,.2) 43%, rgba(233,247,207,.52) 51%, rgba(178,132,211,.16) 59%, transparent 76%) !important;
+  background-size: 300% 100% !important;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0 3px, rgba(0,0,0,.32) 12px, transparent 60%);
+  mask-image: linear-gradient(to bottom, #000 0 3px, rgba(0,0,0,.32) 12px, transparent 60%);
+  opacity: 1 !important;
+  animation: boot-board-answer var(--boot-flow-duration, 1400ms) ease-in-out infinite !important;
+  animation-delay: calc((var(--board-column) - 1) * 55ms + (var(--board-row) - 1) * 12ms) !important;
+}
+body.booting.boot-final-charge #payoutBoardGrid .tile::before {
+  animation: boot-board-answer var(--boot-finish-duration, 950ms) ease-in-out both !important;
+  animation-delay: 0ms !important;
+}
+/* A recessed screen gathers light gradually, peaks, then lets it fall away. */
+body.booting.boot-inner-lit:not(.game-active) .roll-screen {
+  background-image: none !important;
+  animation: none !important;
+}
+body.booting.boot-inner-lit .roll-screen::after {
+  background: linear-gradient(110deg, transparent 20%, rgba(174,123,214,.12) 43%, rgba(223,242,185,.2) 51%, transparent 75%);
+  background-size: 300% 100%;
+  opacity: 0;
+  animation: ball-glare-envelope 2200ms ease-in-out infinite;
+}
+@keyframes ball-glare-envelope {
+  0%, 12% { background-position: 100% 0; opacity: .03; box-shadow: inset 0 0 8px rgba(155,111,190,.03); }
+  32% { opacity: .22; }
+  50% { background-position: 50% 0; opacity: .9; box-shadow: inset 0 0 13px rgba(209,235,164,.3); }
+  68% { opacity: .22; }
+  88%, 100% { background-position: 0 0; opacity: .03; box-shadow: inset 0 0 8px rgba(155,111,190,.03); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-under-glow #payoutBoardGrid .tile::before,
+  body.booting.boot-inner-lit .roll-screen::after { animation: none !important; opacity: 0 !important; }
+}
+
+/* Keep the full screen glare for Dazzle, with one smooth rise, hold, and decay. */
+body.booting .top-header .status-box {
+  position: relative;
+  background-image: none !important;
+  animation: none !important;
+}
+body.booting.boot-title-dazzle .top-header .status-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(110deg, transparent 10%, rgba(159,108,201,.26) 37%, rgba(219,239,177,.42) 51%, rgba(159,108,201,.2) 65%, transparent 90%);
+  background-size: 240% 100%;
+  animation: dazzle-screen-glare 4000ms cubic-bezier(.4,0,.35,1) both;
+}
+body.booting.boot-title-razzle .roll-screen::after { animation: none !important; background: none; opacity: 0; }
+body.booting.boot-title-dazzle .roll-screen::after {
+  animation: dazzle-screen-glare 4000ms cubic-bezier(.4,0,.35,1) both;
+}
+@keyframes dazzle-screen-glare {
+  0% { opacity: 0; background-position: 100% 0; }
+  25% { opacity: .2; }
+  48% { opacity: .75; background-position: 55% 0; }
+  64% { opacity: .75; }
+  82% { opacity: .35; }
+  100% { opacity: .12; background-position: 0 0; }
+}
+body.booting.boot-lingering .top-header .status-box::before,
+body.booting.boot-lingering .roll-screen::after {
+  animation: screen-glare-tail 650ms ease-out both !important;
+}
+@keyframes screen-glare-tail {
+  0%, 20% { opacity: var(--glare-tail-start, .2); }
+  100% { opacity: 0; }
+}
+.control-stats-left { grid-template-columns: calc(50% + 11px) minmax(0, 1fr); }
+.control-stats-right { grid-template-columns: calc(32.5% + 11px) minmax(0, 1fr); }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-title-dazzle .top-header .status-box::before,
+  body.booting.boot-title-dazzle .roll-screen::after { animation: none !important; opacity: 0; }
+}
+
+/* Decay from the actual lamp brightness instead of cutting to normal. */
+body.booting.boot-lingering #payoutBoardGrid .tile .tile-sum,
+body.booting.boot-lingering #payoutBoardGrid .tile .tile-payout,
+body.booting.boot-lingering #rollResultsDisplay .dice-chip.empty,
+body.booting.boot-lingering .control-bar .boot-feature-visible,
+body.booting.boot-lingering .main-footer .boot-feature-visible {
+  animation: lamp-to-calm 650ms ease-out both !important;
+}
+@keyframes lamp-to-calm {
+  from { filter: var(--fade-from-filter, brightness(1)); opacity: var(--fade-from-opacity, 1); color: var(--fade-from-color); }
+  to { filter: brightness(1); opacity: 1; color: var(--fade-to-color); }
+}
+body:not(.booting) #payoutBoardGrid .tile .tile-sum.boot-settling-pulse,
+body:not(.booting) #rollResultsDisplay .dice-chip.empty.boot-settling-pulse,
+body:not(.booting) .control-actions button.boot-settling-pulse,
+body:not(.booting) .main-footer button.boot-settling-pulse {
+  animation: scattered-last-pulses var(--settle-duration, 1000ms) ease-in-out both !important;
+  animation-delay: var(--settle-delay, 0ms) !important;
+}
+@keyframes scattered-last-pulses {
+  0% { filter: brightness(1); }
+  12% { filter: brightness(1.85); }
+  25% { filter: brightness(.55); }
+  40% { filter: brightness(1.5); }
+  56% { filter: brightness(.8); }
+  72% { filter: brightness(1.2); }
+  100% { filter: brightness(1); }
+}
+body.booting.boot-center-lit .top-header .status-box .status-value {
+  visibility: visible; opacity: 1; color: #d9dce2;
+}
+body.booting.boot-center-lit .top-header .status-box .status-label { visibility: visible; opacity: 1; }
+body.booting.boot-title-razzle .roll-screen::before { animation: none; opacity: 0; }
+/* A low-strength full-board reflection links the stronger raised-edge catches. */
+body.booting.boot-under-glow .unified-board::before {
+  content: '';
+  position: absolute;
+  inset: 8px 14px;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(110deg, transparent 22%, rgba(196,157,223,.08) 43%, rgba(233,246,210,.15) 51%, rgba(174,125,209,.06) 60%, transparent 78%);
+  background-size: 350% 100%;
+  mix-blend-mode: screen;
+  animation: boot-cabinet-flow var(--boot-flow-duration, 1400ms) ease-in-out infinite;
+}
+body.booting.boot-final-charge .unified-board::before { animation: boot-cabinet-finish var(--boot-finish-duration, 950ms) ease-in-out both; }
+.control-stats-left { grid-template-columns: calc(50% + 14px) minmax(0, 1fr); }
+.control-stats-right { grid-template-columns: calc(32.5% + 15px) minmax(0, 1fr); }
+#rollButton:not(.razzle-launch)::before {
+  background-image: radial-gradient(ellipse at 6% 13%, rgba(48,62,75,.38) 0 7%, rgba(76,89,101,.2) 7.7%, rgba(247,251,253,.3) 8.5%, transparent 10%),
+    radial-gradient(ellipse at 85% 9%, rgba(48,62,75,.38) 0 8%, rgba(76,89,101,.2) 8.7%, rgba(247,251,253,.3) 9.5%, transparent 11%),
+    radial-gradient(ellipse at 11% 80%, rgba(48,62,75,.38) 0 8%, rgba(76,89,101,.2) 8.7%, rgba(247,251,253,.3) 9.5%, transparent 11%),
+    radial-gradient(ellipse at 94% 77%, rgba(48,62,75,.38) 0 7%, rgba(76,89,101,.2) 7.7%, rgba(247,251,253,.3) 8.5%, transparent 10%),
+    radial-gradient(ellipse at 42% 5%, rgba(48,62,75,.38) 0 5%, rgba(76,89,101,.2) 5.7%, rgba(247,251,253,.3) 6.5%, transparent 8%),
+    radial-gradient(ellipse at 65% 94%, rgba(48,62,75,.38) 0 6%, rgba(76,89,101,.2) 6.7%, rgba(247,251,253,.3) 7.5%, transparent 9%),
+    radial-gradient(ellipse at 95% 36%, rgba(48,62,75,.38) 0 5%, rgba(76,89,101,.2) 5.7%, rgba(247,251,253,.3) 6.5%, transparent 8%),
+    radial-gradient(ellipse at 20% 97%, rgba(48,62,75,.38) 0 5%, rgba(76,89,101,.2) 5.7%, rgba(247,251,253,.3) 6.5%, transparent 8%),
+    radial-gradient(ellipse at 27% 27%, rgba(48,62,75,.38) 0 1.5%, rgba(76,89,101,.2) 2.2%, rgba(247,251,253,.3) 3%, transparent 4.5%),
+    radial-gradient(ellipse at 67% 23%, rgba(48,62,75,.38) 0 2%, rgba(76,89,101,.2) 2.7%, rgba(247,251,253,.3) 3.5%, transparent 5%),
+    radial-gradient(ellipse at 12% 49%, rgba(48,62,75,.38) 0 2%, rgba(76,89,101,.2) 2.7%, rgba(247,251,253,.3) 3.5%, transparent 5%),
+    radial-gradient(ellipse at 87% 57%, rgba(48,62,75,.38) 0 2%, rgba(76,89,101,.2) 2.7%, rgba(247,251,253,.3) 3.5%, transparent 5%),
+    radial-gradient(ellipse at 36% 81%, rgba(48,62,75,.38) 0 1.5%, rgba(76,89,101,.2) 2.2%, rgba(247,251,253,.3) 3%, transparent 4.5%),
+    radial-gradient(ellipse at 59% 85%, rgba(48,62,75,.38) 0 1%, rgba(76,89,101,.2) 1.7%, rgba(247,251,253,.3) 2.5%, transparent 4%),
+    radial-gradient(ellipse at 84% 33%, rgba(48,62,75,.38) 0 1.4%, rgba(76,89,101,.2) 2.0999999999999996%, rgba(247,251,253,.3) 2.9%, transparent 4.4%),
+    radial-gradient(ellipse at 20% 30%, rgba(48,62,75,.38) 0 1%, rgba(76,89,101,.2) 1.7%, rgba(247,251,253,.3) 2.5%, transparent 4%),
+    radial-gradient(ellipse at 76% 72%, rgba(48,62,75,.38) 0 2%, rgba(76,89,101,.2) 2.7%, rgba(247,251,253,.3) 3.5%, transparent 5%),
+    radial-gradient(ellipse at 46% 18%, rgba(48,62,75,.38) 0 1%, rgba(76,89,101,.2) 1.7%, rgba(247,251,253,.3) 2.5%, transparent 4%),
+    repeating-linear-gradient(0deg, transparent 0 6px, rgba(65,78,90,.1) 7px, rgba(245,249,252,.14) 8px, transparent 9px 15px);
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-under-glow .unified-board::before,
+  body:not(.booting) .boot-settling-pulse { animation: none !important; }
+}
+
+body.booting.boot-lingering #payoutBoardGrid .tile::after {
+  animation: underlamp-to-calm 650ms ease-out both !important;
+}
+@keyframes underlamp-to-calm {
+  from { filter: var(--edge-fade-filter, brightness(1)); }
+  to { filter: brightness(1); }
+}
+
+/* Irregular groups answer each other; each pulse has a soft envelope. */
+body.booting.boot-trigger-primed #rollResultsDisplay .dice-chip.empty {
+  animation: none !important;
+  filter: brightness(.5);
+  border-color: rgba(151,106,189,.3);
+}
+body.booting.boot-trigger-primed #rollResultsDisplay .dice-chip.empty.boot-socket-group-flash {
+  animation: socket-group-pulse var(--socket-group-duration, 360ms) cubic-bezier(.4,0,.35,1) both !important;
+}
+@keyframes socket-group-pulse {
+  0%, 100% { filter: brightness(.5); border-color: rgba(151,106,189,.3); box-shadow: inset 0 4px 10px rgba(0,0,0,.9), 0 0 5px rgba(151,106,189,.08); }
+  48% { filter: brightness(var(--socket-group-peak, 1.3)); border-color: rgba(213,234,174,.65); box-shadow: inset 0 0 12px rgba(216,240,173,var(--socket-group-glow, .2)), 0 0 9px rgba(177,130,217,var(--socket-group-glow, .2)); }
+}
+body.booting.boot-lingering #rollResultsDisplay .dice-chip.empty.boot-socket-group-flash { animation: lamp-to-calm 650ms ease-out both !important; }
+/* Terrain passes across a tilted axis; the spherical shading remains separate. */
+#rollButton:not(.razzle-launch)::before {
+  inset: -12%;
+  transform: rotate(-16deg);
+  background-size: 145% 100%;
+  background-repeat: repeat-x;
+}
+body:not(.no-pulse-effects):not(.battery-saver) #rollButton:not(.razzle-launch)::before {
+  animation: moon-axis-turn 38s linear infinite;
+}
+@keyframes moon-axis-turn {
+  from { transform: rotate(-16deg); background-position: 0% 50%; }
+  to { transform: rotate(-16deg); background-position: 322.222% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-trigger-primed #rollResultsDisplay .dice-chip.empty.boot-socket-group-flash,
+  body #rollButton:not(.razzle-launch)::before { animation: none !important; }
+}
+
+/* One gutter surrounds and separates every cabinet section. */
+:root { --cabinet-gutter: .9rem; --strip-gap: var(--cabinet-gutter); }
+.main-container { padding: var(--cabinet-gutter); }
+.top-header, .unified-board, .control-bar { margin-bottom: var(--cabinet-gutter); }
+.main-footer { margin-bottom: 0; }
+
+/* Restore the outer breathing room; the header and footer sit on the baseboard. */
+:root { --cabinet-gutter: 1.4rem; --section-gap: .9rem; --strip-gap: var(--section-gap); }
+.main-container { padding: var(--cabinet-gutter); }
+.top-header, .unified-board, .control-bar { margin-bottom: var(--section-gap); }
+.top-header {
+  height: 96px;
+  min-height: 96px;
+  padding: .25rem .2rem;
+}
+.header-status-wrap { min-height: 80px; height: 80px; transform: none; }
+.top-header .status-box { height: 80px; }
+.main-footer {
+  height: var(--strip-height);
+  min-height: var(--strip-height);
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  padding: .35rem .6rem;
+}
+.main-footer > div {
+  display: grid !important;
+  grid-template-columns: 1fr auto auto;
+  column-gap: .7rem;
+  width: 100%;
+}
+.main-footer #muteButton { justify-self: start; }
+.main-footer #onoLogo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* The temporary brand mark is independent of the cabinet and utility footer. */
+#onoLogo.floating-brand {
+  position: fixed;
+  left: 50%;
+  bottom: 7px;
+  top: auto;
+  transform: translateX(-50%);
+  height: 21px;
+  width: auto;
+  opacity: .55;
+  z-index: 20;
+  pointer-events: none;
+}
+body.booting #onoLogo.floating-brand { visibility: hidden; }
+body.booting #onoLogo.floating-brand.boot-feature-visible { visibility: visible; }
+.main-footer { height: 64px; min-height: 64px; padding: .35rem .3rem 0; }
+.main-footer > div { column-gap: .6rem; }
+.main-footer .footer-btn { width: 46px; height: 46px; border: 1px solid rgba(168,155,180,.23); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 3px 7px rgba(0,0,0,.42); }
+
+.main-footer::after { display: none; }
+.main-footer :is(#muteButton, #settingsButton, #reloadButtonFooter) { width: 46px; height: 46px; padding: 8px; }
+
+#reloadButtonFooter.floating-refresh {
+  position: fixed;
+  right: 16px;
+  bottom: 10px;
+  z-index: 20;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(161,151,174,.25);
+  background: linear-gradient(145deg, #25242a, #121216);
+  color: #c5c4ca;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.09), 0 3px 9px rgba(0,0,0,.45);
+}
+body.booting #reloadButtonFooter.floating-refresh { visibility: hidden; }
+body.booting #reloadButtonFooter.floating-refresh.boot-feature-visible { visibility: visible; }
+.main-footer > div { grid-template-columns: 1fr auto; }
+
+/* Match visible screen and utility edges to the outer cabinet gutter. */
+:root { --section-gap: var(--cabinet-gutter); }
+.top-header { height: 80px; min-height: 80px; padding: 0; }
+.main-footer { height: 46px; min-height: 46px; padding: 0; }
+
+/* A wider cabinet gives the readouts and control group room to breathe. */
+#game-container { max-width: 1000px; }
+.top-header {
+  height: 116px;
+  min-height: 116px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: var(--board-gap, 5px);
+  align-items: start;
+  padding: 0 calc(.9rem + 3px);
+}
+.header-status-wrap {
+  grid-column: 2 / 8;
+  grid-row: 1;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr) minmax(0, 1fr);
+  width: 100%;
+  margin-left: 0;
+  transform: translateY(-3px);
+}
+.top-header > .brand-block { position: absolute; top: 14px; transform: none; }
+.top-header > .left-brand { left: 0; margin-left: 6px; }
+.top-header > .right-brand { right: 0; margin-right: 6px; }
+.cabinet-game-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  gap: .65em;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 26px;
+  letter-spacing: .19em;
+  color: #d0b1e6;
+  text-shadow: 0 1px 1px #000, 0 0 8px rgba(145,91,190,.18);
+}
+.cabinet-game-title > span:last-child { color: #e2d5ec; }
+body.booting .cabinet-game-title { opacity: 0; transition: opacity 650ms ease; }
+body.booting.boot-labels-lit .cabinet-game-title { opacity: 1; }
+.control-bar { height: 100px; min-height: 100px; align-content: center; }
+.control-actions { gap: .65rem; padding-inline: .3rem; }
+
+/* The title crowns the screens; the small brand marks sit in the upper corners. */
+.top-header { height: 108px; min-height: 108px; }
+.cabinet-game-title { top: 0; bottom: auto; line-height: 22px; }
+.header-status-wrap { transform: translateY(28px); }
+.top-header > .brand-block { top: 1px; }
+.top-header > .left-brand { left: 0; margin-left: 0; }
+.top-header > .right-brand { right: 0; margin-right: 0; }
+.main-footer { margin-top: 8px; }
+.main-footer #onoLogo { height: 36px !important; width: auto; }
+#rollButton { top: -2px; }
+
+/* A full title band balances the footer and leaves the screen flanks available. */
+.top-header { height: 158px; min-height: 158px; }
+.cabinet-game-title {
+  top: 0;
+  height: 64px;
+  line-height: 1.15;
+  align-items: center;
+  font-size: 25px;
+  letter-spacing: .2em;
+}
+.header-status-wrap { transform: translateY(78px); }
+.top-header > .brand-block { top: 2px; }
+@media (max-height: 790px) {
+  .top-header { height: 138px; min-height: 138px; }
+  .cabinet-game-title { height: 48px; font-size: 22px; }
+  .header-status-wrap { transform: translateY(58px); }
+}
+
+.aux-screen {
+  grid-row: 1;
+  transform: translateY(78px);
+  height: 80px;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid rgba(151,99,195,.36);
+  border-radius: 8px;
+  background: #070709;
+  box-shadow: inset 0 2px 7px rgba(0,0,0,.8), inset 0 0 0 1px rgba(151,99,195,.12), 0 2px 5px rgba(0,0,0,.3);
+  overflow: hidden;
+}
+.aux-left { grid-column: 1; margin-right: 4px; }
+.aux-right { grid-column: 8; margin-left: 4px; }
+.ambient-stat-label, .bonus-screen-label { font-size: 9px; letter-spacing: .08em; color: #b9afc3; white-space: nowrap; }
+.ambient-stat-value { font-size: clamp(12px, 1.5vw, 20px); font-weight: 700; color: #d8d0e0; max-width: 100%; }
+.bonus-screen-label, .aux-screen .bonus-brand-stat { display: none; }
+.aux-screen:has(.bonus-brand-stat.visible) .ambient-stat-label,
+.aux-screen:has(.bonus-brand-stat.visible) .ambient-stat-value { display: none; }
+.aux-screen:has(.bonus-brand-stat.visible) .bonus-screen-label { display: block; }
+.aux-screen .bonus-brand-stat.visible {
+  display: flex;
+  position: relative;
+  top: auto; left: auto; right: auto;
+  width: 100%; min-height: 26px;
+  align-items: center; justify-content: center;
+  font-size: 22px; line-height: 1.1; opacity: 1;
+}
+body.booting .aux-screen { opacity: 0; transition: opacity 650ms ease; }
+body.booting.boot-labels-lit .aux-screen { opacity: 1; }
+.cabinet-game-title { font-size: clamp(28px, 3.7vw, 42px); letter-spacing: .25em; gap: .65em; }
+.cabinet-game-title > span, .cabinet-game-title > span:last-child {
+  color: transparent;
+  background: linear-gradient(175deg, #f4eefb 5%, #c9bed8 34%, #8e79a6 52%, #e1d6ed 72%, #ac91c4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 0 2px 2px rgba(0,0,0,.16);
+}
+/* Matching clearance around every edge of the key bed. */
+.unified-board { padding: .9rem; --board-collapsed-height: calc(var(--board-row-height) + 1.8rem + 6px); --board-expanded-height: calc(var(--board-row-height) * 6 + var(--board-gap) * 5 + 1.8rem + 6px); }
+body.booting #payoutBoardGrid, body.booting.boot-opening #payoutBoardGrid {
+  height: calc(var(--board-row-height) * var(--boot-visible-rows, 1) + var(--board-gap) * (var(--boot-visible-rows, 1) - 1) + 1.8rem + 6px);
+}
+.control-stats-right .control-stat:first-child .stat-label { position: relative; left: 3px; }
+@media (max-height: 790px) { .aux-screen { transform: translateY(58px); } }
+
+/* Keep the title subordinate to the board and controls. */
+.top-header { height: 128px; min-height: 128px; }
+.cabinet-game-title { height: 40px; font-size: 30px; letter-spacing: .18em; gap: .55em; }
+.header-status-wrap { transform: translateY(48px); }
+.aux-screen { transform: translateY(48px); }
+@media (max-height: 790px) {
+  .top-header { height: 118px; min-height: 118px; }
+  .cabinet-game-title { height: 32px; font-size: 27px; }
+  .header-status-wrap, .aux-screen { transform: translateY(38px); }
+}
+
+.top-header .status-left .status-value,
+.top-header .status-right .status-value { font-size: 2rem; min-height: 2.5rem; }
+
+/* Let square rows extend the cabinet naturally instead of clipping its bottom. */
+body { max-height: none; overflow-y: auto; }
+
+/* A stable, proportional cabinet fits the viewport before the opening starts. */
+body { overflow: hidden; padding: 10px 12px 0; }
+#game-container { width: 1000px; max-width: none; }
+.cabinet-game-title { top: -8px; height: 42px; font-size: 34px; letter-spacing: .25em; }
+.top-header .status-left .status-value, .top-header .status-right .status-value { font-family: 'AlarmClock', monospace; font-size: 38px; font-weight: 400; }
+.aux-screen { border-radius: 0; background: #030304; border-color: rgba(138,107,161,.2); gap: 9px; }
+.aux-left { margin-left: calc(-1 * (var(--cabinet-gutter) + .9rem + 3px)); margin-right: 3px; padding-left: var(--cabinet-gutter); border-left: 0; }
+.aux-right { margin-right: calc(-1 * (var(--cabinet-gutter) + .9rem + 3px)); margin-left: 3px; padding-right: var(--cabinet-gutter); border-right: 0; }
+.ambient-stat-label, .bonus-screen-label { font-size: 11px; }
+.ambient-stat-value { font-size: 25px; }
+.tile-payout { font-size: 1.35rem; }
+.tile-sum { font-size: 2rem; }
+body .dice-chip:not(.empty) {
+  --chip-tone: #b6b8bd;
+  background: radial-gradient(circle at 29% 22%, #f0f0f2 0%, #bfc1c6 38%, #767c86 80%, #555e68 100%) !important;
+  border-color: rgba(52,57,64,.65) !important;
+}
+body .dice-chip:not(.empty) .chip-number { color: #17191e !important; font-size: 1.9rem; text-shadow: 0 1px 0 rgba(255,255,255,.35); }
+body:not(.no-pulse-effects):not(.battery-saver) .dice-chip.chip-reveal .chip-number { animation: marble-number-flicker 420ms ease-out both; }
+@keyframes marble-number-flicker { 0%, 35% { opacity: .2; } 18%, 60%, 100% { opacity: 1; } }
+#rollButton:not(.razzle-launch)::before {
+  inset: 0;
+  background-image: url('moon-surface.svg');
+  background-size: 200% 100%;
+  background-repeat: repeat-x;
+  mask: none;
+  -webkit-mask: none;
+  opacity: .65;
+}
+@keyframes moon-axis-turn { from { transform: rotate(-12deg); background-position: 0% 50%; } to { transform: rotate(-12deg); background-position: 200% 50%; } }
+
+/* Restore the plain three-screen header and its side labels. */
+.top-header { height: 80px; min-height: 80px; }
+.header-status-wrap { transform: none; }
+.top-header > .brand-block { top: 20px; }
+
+/* Larger multipliers sit clearly below the squared-off main numerals. */
+#payoutBoardGrid .tile .tile-sum {
+  font-family: 'Arial Black', Impact, sans-serif;
+  font-size: 2.05rem;
+  font-weight: 900;
+  letter-spacing: .015em;
+  line-height: 1;
+}
+#payoutBoardGrid .tile .tile-payout { font-size: 1.5rem; margin-top: 7px; line-height: 1.05; }
+/* The supplied rotating-disc phase motion, using the existing silver-gray palette. */
+.control-actions #rollButton .moon-phase {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: #c7d0d7;
+  transform: translateZ(0);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: .6;
+}
+.moon-phase::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%; height: 100%;
+  background-color: #65717d;
+  animation: moon-phase-flip 2s 1s steps(2) infinite alternate;
+}
+.moon-disc {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  animation: moon-disc-rotate 4s linear infinite;
+}
+.moon-disc::before, .moon-disc::after {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+.moon-disc::before { background-color: #65717d; }
+.moon-disc::after { background-color: #dce3e8; transform: rotateY(180deg); }
+@keyframes moon-disc-rotate { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+@keyframes moon-phase-flip { from { left: 0; } to { left: 100%; } }
+#rollButton.razzle-launch .moon-phase { display: none; }
+body.no-pulse-effects .moon-disc, body.battery-saver .moon-disc,
+body.no-pulse-effects .moon-phase::before, body.battery-saver .moon-phase::before { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .moon-disc, .moon-phase::before { animation: none !important; }
+}
+
+/* Keep physical keys square independently of the cabinet's viewport scale. */
+#payoutBoardGrid > .tile { aspect-ratio: 1; width: 100%; height: auto; min-height: 0; align-self: start; }
+.unified-board {
+  --board-section-break: calc(.9rem - var(--board-gap));
+  grid-template-rows: calc(var(--board-row-height) + var(--board-section-break)) repeat(5, var(--board-row-height));
+}
+.roll-screen-cell { height: var(--board-row-height); min-height: 0; align-self: start; }
+body.booting #payoutBoardGrid, body.booting.boot-opening #payoutBoardGrid {
+  height: calc(var(--board-row-height) * var(--boot-visible-rows, 1) + var(--board-gap) * (var(--boot-visible-rows, 1) - 1) + 1.8rem + 6px + var(--board-section-break));
+}
+.top-header { height: 94px; min-height: 94px; }
+.header-status-wrap { height: 94px; min-height: 94px; }
+.top-header .status-box { height: 94px; min-height: 94px; }
+.top-header .status-center { align-items: center; padding: 4px 8px; }
+.top-header > .brand-block { top: 14px; }
+.main-footer { margin-top: 0; }
+/* Light stays around the recessed balls without flattening the moon surface. */
+body:not(.booting):not(.razzle-active) .dice-chip.empty {
+  box-shadow: inset 0 4px 11px rgba(0,0,0,.94), inset 0 0 10px rgba(155,106,198,.24), inset 0 0 0 1px rgba(188,143,222,.28), 0 0 10px rgba(145,91,190,.3);
+}
+.control-actions #rollButton .moon-phase { opacity: .32; }
+#rollButton:not(.razzle-launch)::before { opacity: .85; }
+#rollButton:not(.razzle-launch)::after {
+  background: radial-gradient(ellipse at 85% 70%, rgba(18,26,36,.48), transparent 64%);
+  box-shadow: inset 0 3px 6px rgba(255,255,255,.3), inset 0 -8px 12px rgba(17,26,36,.38);
+}
+
+/* The 29s use ordinary board tracks; the ball recess is independently positioned. */
+#payoutBoardGrid .roll-screen-cell {
+  position: absolute;
+  grid-column: auto;
+  grid-row: auto;
+  min-height: 0;
+  max-width: none;
+}
+.top-header .status-center { justify-content: center; align-items: center; }
+.header-roll-status { width: auto; max-width: 100%; text-align: center; }
+.dice-slot, .dice-chip { width: 72px; height: 72px; }
+/* Curl the individual marble; neither its socket nor the board row moves. */
+body:not(.no-pulse-effects):not(.battery-saver) .dice-chip.chip-reveal:not(.crazy-lock):not(.sweet16-impact) {
+  animation: marble-curl-reveal 380ms cubic-bezier(.18,.7,.25,1) both;
+}
+@keyframes marble-curl-reveal {
+  0% { transform: perspective(260px) rotateY(-100deg) rotateZ(-20deg) scale(.85); opacity: 0; }
+  65% { transform: perspective(260px) rotateY(15deg) rotateZ(3deg) scale(1.02); opacity: 1; }
+  100% { transform: perspective(260px) rotateY(0deg) rotateZ(0deg) scale(1); opacity: 1; }
+}
+body:not(.no-pulse-effects):not(.battery-saver) .dice-chip.chip-reveal .chip-number {
+  font-family: 'Arial Black', Arial, sans-serif;
+  animation: marble-number-arrive 380ms ease-out both;
+}
+@keyframes marble-number-arrive { 0%, 35% { opacity: 0; } 70%, 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .dice-chip.chip-reveal, .dice-chip.chip-reveal .chip-number { animation: none !important; }
+}
+
+/* Fixed geometry: seven square keys across; only the whole cabinet scales. */
+:root { --fixed-key-size: 100px; }
+#game-container { width: calc(700px + 30px + 1.8rem + 6px + 2.8rem + 6px + 24px); }
+.unified-board {
+  width: calc(700px + 30px + 1.8rem + 6px);
+  --board-row-height: var(--fixed-key-size);
+  --board-section-break: 0px;
+  grid-template-columns: repeat(7, var(--fixed-key-size));
+  grid-template-rows: repeat(6, var(--fixed-key-size));
+}
+#payoutBoardGrid > .tile { width: var(--fixed-key-size); height: var(--fixed-key-size); min-height: var(--fixed-key-size); max-height: var(--fixed-key-size); aspect-ratio: 1; }
+.ball-recess {
+  position: relative;
+  width: 100%;
+  height: calc(72px + 1.8rem);
+  min-height: 0;
+  padding: .9rem;
+  margin-bottom: var(--section-gap);
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+.ball-recess::before, .ball-recess::after { display: none; }
+.ball-recess #rollResultsDisplay { width: 100%; flex-wrap: nowrap; justify-content: space-between; gap: 0; }
+/* Preserve a physical top bevel in every glow and result state. */
+#payoutBoardGrid .tile::after {
+  inset: 0;
+  border-top: 1px solid rgba(207,190,224,.42) !important;
+  box-shadow: inset 0 2px 3px rgba(208,189,225,.12), inset 0 -6px 9px rgba(0,0,0,.24), 0 6px 12px var(--value-glow, rgba(174,129,255,.18)) !important;
+}
+
+/* Labels get their own line; screens use the available width below it. */
+.top-header { height: 114px; min-height: 114px; }
+.top-header > .brand-block { top: -4px; }
+.header-status-wrap { grid-column: 1 / -1; transform: translateY(20px); grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr) minmax(0, 1fr); }
+/* The actual key face and its bevel share the same fixed square bounds. */
+#payoutBoardGrid > .tile { box-sizing: border-box; flex: 0 0 100px; }
+#payoutBoardGrid .tile::after { inset: 0; border-radius: inherit; }
+/* Eight phases, offset by exactly one eighth of a shared eight-second cycle. */
+.socket-lunar { display: none; }
+.dice-chip.empty .socket-lunar {
+  display: block;
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 22%, #dbd4e5, #a898ba 70%, #746385);
+  opacity: 1;
+  box-shadow: inset 0 0 5px rgba(208,187,232,.18);
+}
+.socket-lunar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%; height: 100%;
+  background: #09070e;
+  animation: socket-lunar-half 8s linear infinite;
+  animation-delay: var(--lunar-delay, 0s);
+}
+.socket-lunar-disc {
+  display: block;
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: socket-lunar-turn 8s linear infinite;
+  animation-delay: var(--lunar-delay, 0s);
+}
+.socket-lunar-disc::before, .socket-lunar-disc::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  backface-visibility: hidden;
+}
+.socket-lunar-disc::before { background: #09070e; }
+.socket-lunar-disc::after { background: radial-gradient(circle at 30% 22%, #dbd4e5, #a898ba 70%, #746385); transform: rotateY(180deg); }
+@keyframes socket-lunar-turn { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+@keyframes socket-lunar-half { 0%, 49.999% { left: 0; } 50%, 100% { left: 50%; } }
+body.booting #rollResultsDisplay .dice-chip.empty .socket-lunar { opacity: 0; transition: opacity 900ms ease; }
+body.booting.boot-inner-lit #rollResultsDisplay .dice-chip.empty .socket-lunar { opacity: 1; }
+body.booting:not(.boot-inner-lit) .socket-lunar::before,
+body.booting:not(.boot-inner-lit) .socket-lunar-disc { animation-play-state: paused; }
+body #rollResultsDisplay .dice-chip.empty {
+  filter: none !important;
+  animation: none !important;
+  background: #09070e;
+  border-color: rgba(161,121,193,.38);
+}
+body.booting.boot-inner-lit #rollResultsDisplay .dice-chip.empty { opacity: 1 !important; }
+body:not(.booting) #rollResultsDisplay .dice-chip.empty::before,
+body:not(.booting) #rollResultsDisplay .dice-chip.empty::after { animation: none !important; background: none; }
+body.no-pulse-effects .socket-lunar::before, body.no-pulse-effects .socket-lunar-disc,
+body.battery-saver .socket-lunar::before, body.battery-saver .socket-lunar-disc { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .socket-lunar::before, .socket-lunar-disc { animation-play-state: paused !important; } }
+
+/* Optical width correction: fixed key faces, uniformly scaled with the cabinet. */
+#game-container { width: calc(728px + 30px + 1.8rem + 6px + 2.8rem + 6px + 24px); }
+.unified-board { width: calc(728px + 30px + 1.8rem + 6px); grid-template-columns: repeat(7, 104px); }
+#payoutBoardGrid > .tile { width: 104px; height: 100px; min-height: 100px; max-height: 100px; aspect-ratio: auto; flex-basis: 104px; }
+.top-header { height: 128px; min-height: 128px; padding-inline: 0; margin-bottom: calc(var(--section-gap) + .3rem); }
+.header-status-wrap { transform: translateY(26px); }
+.top-header > .brand-block { top: -12px; gap: .8rem; }
+.top-header > .left-brand { left: 12px; margin-left: 0; }
+.top-header > .right-brand { right: 12px; margin-right: 0; }
+/* A tight row of dim, edgeless glass marbles; light material arrives on reveal. */
+.dice-slot, .dice-chip { width: 80px; height: 80px; }
+.ball-recess {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(80px + 1.6rem);
+  padding: 0 .6rem;
+  margin: 0 0 calc(var(--section-gap) + .3rem);
+  border: 3px solid rgba(121,63,168,.55) !important;
+  border-radius: var(--panel-radius);
+  background: #000 !important;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.8), 0 5px 12px rgba(0,0,0,.5) !important;
+  transition: border-color 250ms ease-out, background-color 250ms ease-out, box-shadow 250ms ease-out;
+}
+body.booting:not(.boot-inner-lit) .ball-recess {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.ball-recess #rollResultsDisplay {
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  z-index: 2;
+}
+.top-header .status-left,
+.top-header .status-right {
+  grid-template-rows: 1.2rem minmax(0, 1fr);
+  row-gap: .1rem;
+  padding-top: .8rem;
+}
+body #rollResultsDisplay .dice-chip.empty {
+  border: 1px solid rgba(179,144,207,.42) !important;
+}
+body #rollResultsDisplay .dice-chip:not(.empty) {
+  border: 1px solid rgba(58,54,67,.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.34), 0 4px 8px rgba(0,0,0,.4) !important;
+}
+body:not(.razzle-active) #rollResultsDisplay .dice-chip:not(.empty):not(.bonus-metal) {
+  background: radial-gradient(circle at 30% 20%, #28272e, #0b0b0e 48%, #050506 80%, #17161c) !important;
+  border-color: rgba(169,143,189,.4) !important;
+  box-shadow: inset 0 1px 3px rgba(235,225,245,.18), inset 0 -4px 7px rgba(0,0,0,.8), 0 3px 8px rgba(0,0,0,.5) !important;
+}
+body #rollResultsDisplay .dice-chip:not(.empty) .chip-number {
+  color: #ecebf0 !important;
+  font-family: 'AlarmClock', monospace;
+  font-size: 2.35rem !important;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-shadow: 0 1px 2px #000, 0 0 8px rgba(216,200,234,.3) !important;
+  transform: none;
+}
+body.razzle-active #rollResultsDisplay .dice-chip:not(.empty) .chip-number,
+body #rollResultsDisplay .dice-chip.bonus-metal:not(.empty) .chip-number {
+  color: #080808 !important;
+  text-shadow: 0 1px 1px rgba(255,235,184,.3) !important;
+}
+body:not(.no-pulse-effects):not(.battery-saver) #rollResultsDisplay .dice-chip.chip-reveal .chip-number {
+  animation: result-number-spark var(--result-reveal-duration, 320ms) ease-out both;
+}
+@keyframes result-number-spark {
+  0%, 18% { opacity: 0; transform: scaleY(.08); }
+  36% { opacity: 1; transform: scaleY(1); filter: brightness(1.7); }
+  52% { opacity: .5; transform: scaleY(.2); }
+  76%, 100% { opacity: 1; transform: scaleY(1); filter: brightness(1); }
+}
+body.moon-rolling #rollResultsDisplay .dice-chip.empty .socket-lunar { filter: brightness(2.2); }
+@media (prefers-reduced-motion: reduce) {
+  body #rollResultsDisplay .dice-chip.chip-reveal .chip-number { animation: none !important; }
+}
+body #rollResultsDisplay .dice-chip.empty {
+  background: radial-gradient(ellipse at 30% 19%, rgba(226,216,240,.09), transparent 42%), radial-gradient(ellipse at 65% 85%, rgba(105,79,125,.06), transparent 65%) !important;
+  box-shadow: inset 0 2px 4px rgba(231,221,244,.08), inset 0 -5px 8px rgba(0,0,0,.5), 0 3px 5px rgba(0,0,0,.3) !important;
+}
+.dice-chip.empty .socket-lunar {
+  inset: 0;
+  background: rgba(211,195,229,.025);
+  box-shadow: none;
+}
+.socket-lunar::before, .socket-lunar-disc::before { background: rgba(4,3,8,.3); }
+.socket-lunar-disc::after { background: radial-gradient(circle at 30% 22%, rgba(223,214,234,.065), rgba(168,152,186,.035) 70%, rgba(116,99,133,.015)); }
+body #rollResultsDisplay .dice-chip.empty::before {
+  background: radial-gradient(ellipse at 30% 20%, rgba(240,231,249,.1), transparent 28%);
+  opacity: .55;
+  box-shadow: none;
+}
+body #rollResultsDisplay .dice-chip.empty::after { background: none; box-shadow: none; }
+
+/* Tighten only the two marked gaps around the ball strip. */
+.top-header { margin-bottom: 8px; }
+.ball-recess { margin-bottom: 8px; }
+
+/* Glossy black LED glass with a restrained reflection above the readout. */
+body:not(.booting):not(.razzle-active) .top-header .status-box {
+  background-color: #020204;
+  background-image: linear-gradient(165deg, rgba(205,207,222,.075) 0%, rgba(147,145,165,.025) 31%, transparent 32%, transparent 75%, rgba(61,49,78,.05) 100%);
+  box-shadow: inset 0 1px 1px rgba(221,218,235,.15), inset 0 0 0 1px rgba(0,0,0,.95), inset 0 -4px 9px rgba(0,0,0,.9), 0 1px 0 rgba(187,155,212,.12), 0 2px 7px rgba(0,0,0,.5);
+}
+body.booting .top-header .status-box { background-color: #020204; }
+
+/* Keep bet adjustment quieter than the main controls. */
+.bet-stepper #increaseBetBtn,
+.bet-stepper #decreaseBetBtn {
+  background: linear-gradient(180deg, #35283f 0%, #251c2d 100%);
+  color: #e5dfeb;
+}
+.bet-stepper #increaseBetBtn:hover:not(:disabled),
+.bet-stepper #decreaseBetBtn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #44324f 0%, #302338 100%);
+}
+
+/* The independent ball strip unfolds from beneath the powered screens. */
+body.booting .ball-recess {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  transform: translateY(-8px);
+  transition: height var(--boot-ball-open-duration, 650ms) cubic-bezier(.25,.7,.3,1), padding var(--boot-ball-open-duration, 650ms) ease, margin var(--boot-ball-open-duration, 650ms) ease, opacity 500ms ease, transform var(--boot-ball-open-duration, 650ms) ease;
+}
+body.booting.boot-balls-opening .ball-recess {
+  height: calc(80px + 1.8rem);
+  padding-top: .9rem;
+  padding-bottom: .9rem;
+  margin-bottom: 8px;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+body.booting:not(.boot-29-lit) #payoutBoardGrid {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-width: 0;
+  border-bottom-width: 0;
+  margin-bottom: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+body.booting #payoutBoardGrid { transition: height var(--boot-drop-duration, 260ms) cubic-bezier(.25,.7,.3,1), opacity 320ms ease; }
+@media (prefers-reduced-motion: reduce) { body.booting .ball-recess { transition-duration: 1ms; } }
+
+/* All three marked section gaps use the same edge-to-edge clearance. */
+:root { --section-clearance: 12px; }
+.top-header, .ball-recess, .unified-board { margin-bottom: var(--section-clearance); }
+
+.top-header { height: 106px; min-height: 106px; }
+body.booting.boot-balls-opening .ball-recess { margin-bottom: var(--section-clearance); }
+
+/* The header includes the full 26px screen offset before its shared gap. */
+.top-header { height: 120px; min-height: 120px; }
+
+/* Match the ball panel's physical rim to the control panel. */
+.ball-recess {
+  border-radius: var(--panel-radius);
+  border-color: rgba(139,83,182,.62) !important;
+  box-shadow: inset 0 1px 0 rgba(211,181,234,.22), inset 0 3px 7px rgba(0,0,0,.8), inset 0 -1px 0 rgba(130,89,160,.2), 0 2px 0 #020203, 0 5px 12px rgba(0,0,0,.5) !important;
+}
+/* Terrain stays above the phase wash, with the play glyph above both. */
+#rollButton:not(.razzle-launch)::before {
+  z-index: 1;
+  opacity: .94;
+  filter: contrast(1.85) brightness(.94);
+  mix-blend-mode: multiply;
+}
+#rollButton:not(.razzle-launch)::after { z-index: 2; }
+#rollButton #rollButtonIcon { position: relative; z-index: 3; }
+
+/* The opening and resting recess share identical geometry: no handoff snap. */
+body.booting.boot-balls-opening .ball-recess {
+  height: calc(80px + 1.6rem);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+body.booting #payoutBoardGrid,
+body.booting.boot-opening #payoutBoardGrid {
+  transition: height var(--boot-drop-duration, 290ms) linear, opacity 320ms ease;
+}
+/* Dark upper lip and a lower reflected rim make the marbles sit in a well. */
+.ball-recess {
+  background: linear-gradient(180deg, #010103, #08060c 75%, #0d0912) !important;
+  box-shadow: inset 0 7px 11px rgba(0,0,0,.95), inset 0 2px 2px rgba(0,0,0,.95), inset 0 -2px 1px rgba(185,150,211,.21), 0 1px 0 rgba(205,178,222,.12), 0 4px 9px rgba(0,0,0,.5) !important;
+}
+.ball-recess #rollResultsDisplay { transform: translateY(2px); }
+#rollButton { width: 118px; height: 118px; }
+.top-header > .brand-block {
+  top: -10px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  line-height: 18px;
+}
+.top-header > .left-brand { left: 12px; }
+.top-header > .right-brand { right: 12px; }
+
+/* Short, deliberate drops with a visible rest before the next row. */
+body.booting #payoutBoardGrid,
+body.booting.boot-opening #payoutBoardGrid {
+  transition: height var(--boot-drop-duration, 160ms) cubic-bezier(.2,.65,.35,1), opacity 320ms ease;
+}
+/* The decorative outer rim fades in only after the last drop settles. */
+body.booting:not(.boot-under-glow) .unified-board::after {
+  opacity: 0 !important;
+  animation: none !important;
+}
+.ball-recess,
+body.booting.boot-balls-opening .ball-recess { height: 114px; }
+body.booting:not(.boot-balls-opening) .ball-recess { height: 0; }
+.ball-recess #rollResultsDisplay { transform: none; }
+.ball-recess {
+  border-color: rgba(139,83,182,.62) !important;
+  box-shadow: inset 0 6px 10px rgba(0,0,0,.95), inset 0 1px 0 rgba(211,181,234,.22), inset 0 -2px 1px rgba(185,150,211,.21), 0 0 0 1px rgba(169,119,204,.16), 0 4px 9px rgba(0,0,0,.5) !important;
+}
+.top-header .status-center { padding: 0 8px; }
+.top-header .status-center .header-roll-status { top: 3px; }
+/* A restrained continuous bevel keeps every raised key legible in the light. */
+#payoutBoardGrid .tile::after {
+  border-left: 1px solid rgba(190,175,206,.19);
+  border-right: 1px solid rgba(148,128,169,.22);
+  border-bottom: 1px solid rgba(190,175,206,.24);
+}
+
+/* One quiet violet light level across the idle cabinet's panel rims. */
+body:not(.booting):not(.razzle-active) .ball-recess,
+body:not(.booting):not(.razzle-active) .unified-board,
+body:not(.booting):not(.razzle-active) .control-bar {
+  border-color: rgba(133,88,166,.46) !important;
+}
+body:not(.booting):not(.razzle-active) .ball-recess {
+  box-shadow: inset 0 5px 9px rgba(0,0,0,.88), inset 0 0 12px rgba(153,109,184,.12), inset 0 -3px 7px rgba(170,128,198,.12), 0 1px 0 rgba(180,148,201,.12), 0 4px 9px rgba(0,0,0,.5) !important;
+}
+/* A full perimeter glow belongs to each key, rather than only its top bevel. */
+body:not(.booting):not(.game-active):not(.razzle-active) #payoutBoardGrid .tile {
+  box-shadow: inset 0 1px 1px rgba(213,200,225,.13), inset 0 -3px 5px rgba(0,0,0,.62), 0 0 0 1px rgba(169,143,189,.21), 0 0 7px rgba(153,111,181,.14), 0 4px 7px rgba(0,0,0,.65) !important;
+}
+body:not(.booting):not(.game-active):not(.razzle-active) #payoutBoardGrid .tile::after {
+  border: 1px solid rgba(190,171,206,.2) !important;
+  border-top-color: rgba(210,193,223,.38) !important;
+  box-shadow: inset 0 1px 2px rgba(218,203,231,.12), inset 0 -2px 3px rgba(0,0,0,.45), 0 0 5px rgba(160,120,187,.13) !important;
+}
+
+/* Shared outside rim for screens, recess, and cabinet panels. */
+:root { --idle-rim: rgba(133,88,166,.46); --marble-rim: rgba(169,143,189,.28); }
+.ball-recess { border-radius: 8px; }
+.top-header .status-box {
+  border-width: 3px;
+  border-style: solid;
+  border-color: var(--idle-rim);
+  border-radius: var(--panel-radius);
+}
+body:not(.booting):not(.razzle-active) .top-header .status-box {
+  border-color: var(--idle-rim);
+  box-shadow: inset 0 1px 1px rgba(221,218,235,.12), inset 0 -4px 9px rgba(0,0,0,.9), 0 0 6px rgba(153,111,181,.12);
+}
+body #rollResultsDisplay .dice-chip.empty {
+  border: 3px solid var(--marble-rim) !important;
+  box-shadow: inset 0 2px 4px rgba(231,221,244,.08), inset 0 -5px 8px rgba(0,0,0,.5), 0 0 7px rgba(153,111,181,.14), 0 3px 5px rgba(0,0,0,.3) !important;
+}
+.top-header > .brand-block { top: -6px; }
+/* Each mechanical drop finishes, then holds still for the next cue. */
+body.booting #payoutBoardGrid,
+body.booting.boot-opening #payoutBoardGrid {
+  transition: height var(--boot-drop-duration, 180ms) cubic-bezier(.12,.65,.25,1), opacity 320ms ease;
+}
+/* Center the label line in the space between cabinet lip and screen tops. */
+.top-header > .brand-block { top: -12px; }
+
+/* Shared cabinet corners; labels sit in the center of their own gap. */
+.ball-recess { border-radius: var(--panel-radius); }
+.top-header > .brand-block { top: -7px; }
+/* The row shell opens first; independent lamps arrive in a shuffled sequence. */
+body.booting #payoutBoardGrid .tile:not(.boot-content-visible) > .tile-sum,
+body.booting #payoutBoardGrid .tile:not(.boot-content-visible) > .tile-payout,
+body.booting #payoutBoardGrid .tile:not(.boot-content-visible) > .trigger-title {
+  visibility: hidden !important;
+}
+/* Equal track inset on a viewBox matching the actual key proportions. */
+#payoutBoardGrid .trigger-title { font-size: 9px; letter-spacing: .2px; }
+#payoutBoardGrid .trigger-track {
+  stroke: #bd95dc;
+  stroke-width: .85;
+  opacity: .6;
+  filter: drop-shadow(0 0 2px rgba(180,125,222,.5));
+}
+
+/* Keep lettering centered on its track and above the key's surface lighting. */
+#payoutBoardGrid .trigger-title { z-index: 3; }
+#payoutBoardGrid .trigger-title text { dominant-baseline: central; }
+body #rollResultsDisplay .dice-chip.empty {
+  border-color: rgba(190,163,209,.36) !important;
+  box-shadow: inset 0 1px 2px rgba(225,211,236,.16), inset 0 -5px 8px rgba(0,0,0,.55), 0 0 0 1px rgba(159,120,184,.12), 0 0 7px rgba(153,111,181,.16), 0 3px 5px rgba(0,0,0,.4) !important;
+}
+/* The traveling reflection wraps each raised key's perimeter, leaving gaps dark. */
+body.booting.boot-under-glow #payoutBoardGrid .tile::before {
+  padding: 3px;
+  box-sizing: border-box;
+  border: 0 !important;
+  background: linear-gradient(110deg, transparent 20%, rgba(207,174,235,.18) 43%, rgba(238,246,222,.7) 51%, rgba(178,132,211,.2) 59%, transparent 76%) !important;
+  background-size: 300% 100% !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+body.booting.boot-under-glow .unified-board::before {
+  background: linear-gradient(110deg, transparent 22%, rgba(196,157,223,.02) 43%, rgba(233,246,210,.035) 51%, rgba(174,125,209,.015) 60%, transparent 78%);
+  background-size: 350% 100%;
+}
+body.booting.boot-title-dazzle .top-header .status-box::before {
+  background: linear-gradient(110deg, transparent 22%, rgba(171,144,194,.09) 43%, rgba(234,244,216,.24) 51%, rgba(172,141,198,.08) 61%, transparent 80%);
+  background-size: 240% 100%;
+  box-shadow: inset 0 1px 2px rgba(223,210,236,.15), inset 0 -1px 3px rgba(171,136,199,.08);
+}
+
+/* Tighten the number-to-multiplier gap by one pixel. */
+#payoutBoardGrid .tile .tile-sum { top: -1px; }
+
+/* Readable words centered on each straight stretch of the bezel. */
+#payoutBoardGrid .trigger-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  fill: #f5eaff;
+}
+
+/* Let the mechanical expansion read clearly before the lamp sequence begins. */
+body.booting:not(.boot-under-glow) #payoutBoardGrid .tile .tile-sum {
+  animation: none !important;
+  color: #d5d7de;
+  filter: none !important;
+}
+body.booting:not(.boot-under-glow) #payoutBoardGrid .tile::after {
+  animation: none !important;
+  opacity: .25 !important;
+}
+body.booting #payoutBoardGrid,
+body.booting.boot-opening #payoutBoardGrid {
+  transition: height var(--boot-drop-duration, 360ms) cubic-bezier(.33,0,.3,1), opacity 320ms ease;
+}
+
+/* Each socket wakes and flickers on its own clock; lunar phase order stays intact. */
+body.booting.boot-inner-lit #rollResultsDisplay .dice-slot .dice-chip.empty {
+  animation: holder-wake var(--holder-flicker-duration, 1100ms) linear var(--holder-reveal-delay, 0ms) 2 both !important;
+}
+@keyframes holder-wake {
+  0% { opacity: 0; filter: brightness(.45); }
+  12% { opacity: .3; filter: brightness(.7); }
+  19% { opacity: .85; filter: brightness(1.25); }
+  26% { opacity: .35; filter: brightness(.65); }
+  39% { opacity: .9; filter: brightness(1.3); }
+  48% { opacity: .55; filter: brightness(.8); }
+  63% { opacity: 1; filter: brightness(1.2); }
+  74% { opacity: .65; filter: brightness(.9); }
+  88%, 100% { opacity: 1; filter: brightness(1); }
+}
+body.booting.boot-inner-lit.no-pulse-effects #rollResultsDisplay .dice-slot .dice-chip.empty,
+body.booting.boot-inner-lit.battery-saver #rollResultsDisplay .dice-slot .dice-chip.empty {
+  animation: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-inner-lit #rollResultsDisplay .dice-slot .dice-chip.empty { animation: none !important; opacity: 1 !important; filter: none !important; }
+}
+/* Animate the holder wrapper so legacy chip opacity rules cannot synchronize it. */
+body.booting.boot-inner-lit #rollResultsDisplay .dice-slot {
+  animation: holder-wake var(--holder-flicker-duration, 1100ms) linear var(--holder-reveal-delay, 0ms) 2 both;
+}
+body.booting.boot-inner-lit #rollResultsDisplay .dice-slot .dice-chip.empty { animation: none !important; }
+body.no-pulse-effects.booting.boot-inner-lit #rollResultsDisplay .dice-slot,
+body.battery-saver.booting.boot-inner-lit #rollResultsDisplay .dice-slot { animation: none; }
+@media (prefers-reduced-motion: reduce) { body.booting.boot-inner-lit #rollResultsDisplay .dice-slot { animation: none; } }
+
+/* More compact readouts, preserving the gap beneath the header. */
+.top-header { height: 106px; min-height: 106px; }
+.header-status-wrap,
+.top-header .status-box { height: 80px; min-height: 80px; }
+.top-header .status-left,
+.top-header .status-right { padding-top: .5rem; }
+
+/* Keep the shooting stars' trailing streak visible at cabinet preview scale. */
+body:not(.razzle-active) .shooting-star::before {
+  top: 50%;
+  left: 2px;
+  width: 200px;
+  height: 2px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(232,223,255,.5) 24%, rgba(211,197,240,.13) 65%, transparent);
+  clip-path: polygon(0 0, 100% 45%, 100% 55%, 0 100%);
+}
+
+/* Never expose half a key while the shell crosses the next row. */
+body.booting #payoutBoardGrid > .tile:not(.boot-row-open) { visibility: hidden !important; }
+body.booting #payoutBoardGrid,
+body.booting.boot-opening #payoutBoardGrid {
+  transition: height var(--boot-drop-duration, 450ms) cubic-bezier(.33,0,.3,1), opacity 320ms ease;
+}
+
+/* The early footer rides below the growing board; controls arrive afterward. */
+body.booting:not(.boot-footer-lit) .main-footer { display: none; }
+body.booting.boot-footer-lit .main-footer { display: flex; }
+
+/* One shell clock; per-key fades avoid a seven-key pop at each settled boundary. */
+body.booting #payoutBoardGrid,
+body.booting.boot-opening #payoutBoardGrid {
+  transition: height var(--boot-drop-duration, 450ms) ease-in-out, opacity 320ms ease;
+}
+body.booting #payoutBoardGrid > .tile.boot-row-open {
+  animation: boot-key-arrive 120ms ease-out both;
+}
+@keyframes boot-key-arrive { from { opacity: 0; } to { opacity: 1; } }
+body.booting.boot-under-glow #payoutBoardGrid .tile .tile-sum {
+  animation-duration: var(--key-number-period, 670ms) !important;
+}
+body.booting.boot-under-glow #payoutBoardGrid .tile .tile-payout {
+  animation-duration: var(--key-payout-period, 590ms) !important;
+}
+body.booting.boot-under-glow #payoutBoardGrid .tile::after {
+  animation-duration: var(--key-lamp-period, 760ms) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.booting #payoutBoardGrid > .tile.boot-row-open { animation: none; }
+}
+body.booting:is(.boot-preflash-dim, .boot-preflash-flicker, .boot-final-charge) #payoutBoardGrid .tile::before {
+  animation: none !important;
+  opacity: 0 !important;
+}
+/* The last light sequence dims lamps, not the cabinet's material geometry. */
+body.booting.boot-preflash-dim :is(#payoutBoardGrid > .tile, #rollResultsDisplay .dice-slot, .boot-feature-visible, .top-header .status-value, .top-header .status-label) {
+  animation: boot-lights-down 450ms ease-in-out both !important;
+}
+@keyframes boot-lights-down { from { filter: brightness(1); } to { filter: brightness(.015); } }
+body.booting.boot-preflash-flicker :is(#payoutBoardGrid > .tile, #rollResultsDisplay .dice-slot, .boot-feature-visible, .top-header .status-value, .top-header .status-label) {
+  animation: boot-preflash-sparks 360ms linear var(--preflash-delay, 0ms) both !important;
+}
+@keyframes boot-preflash-sparks {
+  0%, 24%, 53%, 81%, 100% { filter: brightness(.015); }
+  13%, 65% { filter: brightness(.9); }
+  38%, 89% { filter: brightness(.32); }
+}
+body.booting.boot-final-charge:not(.boot-lingering) :is(#payoutBoardGrid > .tile, #rollResultsDisplay .dice-slot, .boot-feature-visible, .top-header .status-value, .top-header .status-label) {
+  animation: boot-lamp-burst 650ms ease-in-out var(--burst-delay, 0ms) both !important;
+}
+body.booting:is(.boot-preflash-dim, .boot-preflash-flicker, .boot-final-charge) .unified-board::before { opacity: 0 !important; }
+@keyframes boot-contour-burst {
+  0% { opacity: 0; box-shadow: inset 0 0 0 1px rgba(211,181,234,0); }
+  35% { opacity: 1; box-shadow: inset 0 0 0 3px rgba(235,221,248,.85), inset 0 0 14px rgba(192,141,227,.7); }
+  100% { opacity: .18; box-shadow: inset 0 0 0 1px rgba(190,171,206,.22); }
+}
+@keyframes boot-lamp-burst {
+  0% { filter: brightness(.015); }
+  35% { filter: brightness(1.7); }
+  100% { filter: brightness(1); }
+}
+body.booting:is(.no-pulse-effects, .battery-saver).boot-preflash-flicker :is(#payoutBoardGrid > .tile, #rollResultsDisplay .dice-slot, .boot-feature-visible, .top-header .status-value, .top-header .status-label) { animation: none !important; filter: brightness(.015) !important; }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-preflash-flicker :is(#payoutBoardGrid > .tile, #rollResultsDisplay .dice-slot, .boot-feature-visible, .top-header .status-value, .top-header .status-label) { animation: none !important; filter: brightness(.015) !important; }
+}
+
+@keyframes boot-lights-up { from { filter: brightness(.015); } to { filter: brightness(1); } }
+body.booting:is(.no-pulse-effects, .battery-saver).boot-final-charge:not(.boot-lingering) :is(#payoutBoardGrid > .tile, #rollResultsDisplay .dice-slot, .boot-feature-visible, .top-header .status-value, .top-header .status-label) { animation: boot-lights-up 650ms ease-in-out both !important; }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-final-charge:not(.boot-lingering) :is(#payoutBoardGrid > .tile, #rollResultsDisplay .dice-slot, .boot-feature-visible, .top-header .status-value, .top-header .status-label) { animation: boot-lights-up 650ms ease-in-out both !important; }
+}
+
+/* The all-on checkpoint freezes old child flicker; the surge owns each whole key. */
+body.booting.boot-all-on #payoutBoardGrid .tile .tile-sum,
+body.booting.boot-all-on #payoutBoardGrid .tile .tile-payout,
+body.booting.boot-all-on .boot-feature-visible .stat-value {
+  animation: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+body.booting.boot-all-on #payoutBoardGrid .tile .tile-sum { color: #d5d7de; }
+body.booting.boot-all-on #payoutBoardGrid .tile::after { animation: none !important; filter: none !important; }
+
+/* The lower housing is present early; its lamps still wake independently. */
+body.booting.boot-control-open .control-bar { display: grid; }
+/* White numbers arrive individually; multipliers wait for the flashing phase. */
+body.booting:not(.boot-under-glow):not(.boot-preflash-flicker):not(.boot-final-charge):not(.boot-lingering) #payoutBoardGrid > .tile.boot-content-visible > .tile-payout { visibility: hidden !important; opacity: 0 !important; }
+body.booting.boot-preflash-flicker #payoutBoardGrid > .tile.boot-content-visible > .tile-payout,
+body.booting.boot-final-charge #payoutBoardGrid > .tile.boot-content-visible > .tile-payout { visibility: visible !important; opacity: 1 !important; }
+
+/* Light is clipped to physical space that has actually opened. */
+body.booting:not(.boot-under-glow) #payoutBoardGrid { overflow: hidden !important; }
+body.booting .boot-feature:not(.boot-feature-visible) { visibility: hidden !important; opacity: 0 !important; }
+
+/* Power only the machine's existing borders; no added tracing layers. */
+@property --intro-border-light { syntax: '<color>'; inherits: false; initial-value: rgba(66,48,81,.16); }
+body.booting :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) {
+  border-color: var(--intro-border-light) !important;
+  animation: intro-existing-rim-power var(--panel-trace-duration, 950ms) ease-in-out var(--panel-trace-delay, 0ms) both !important;
+}
+@keyframes intro-existing-rim-power {
+  0% { --intro-border-light: rgba(66,48,81,.16); }
+  42% { --intro-border-light: rgba(168,117,206,.7); }
+  100% { --intro-border-light: rgba(133,88,166,.46); }
+}
+body.booting .main-container.purple-glow-pulse { box-shadow: none !important; }
+body.booting .main-container::before,
+body.booting .main-container::after,
+body.booting .unified-board::before,
+body.booting .unified-board::after,
+body.booting .control-bar::before,
+body.booting .control-bar::after,
+body.booting .main-footer::before,
+body.booting .main-footer::after,
+body.booting .top-header .status-box::before { opacity: 0 !important; animation: none !important; }
+body.booting.boot-sides-lit .top-header .status-box { background-image: none !important; }
+body.booting #payoutBoardGrid > .tile.boot-content-visible {
+  animation: intro-item-wake var(--key-number-period, 670ms) ease-in-out var(--preflash-delay, 0ms) infinite;
+}
+@keyframes intro-item-wake { 0%, 100% { filter: brightness(.65); } 27% { filter: brightness(1.15); } 57% { filter: brightness(.4); } 78% { filter: brightness(.9); } }
+body.booting.boot-all-on:not(.boot-preflash-dim):not(.boot-preflash-flicker):not(.boot-final-charge) :is(#payoutBoardGrid > .tile, #rollResultsDisplay .dice-slot, .boot-feature-visible, .top-header .status-value, .top-header .status-label) { animation: none !important; filter: brightness(1) !important; opacity: 1 !important; }
+body.booting.boot-preflash-dim :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) { animation: intro-rim-dark 450ms ease-in-out both !important; }
+body.booting.boot-preflash-flicker :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) { animation: intro-rim-sparks 360ms linear var(--preflash-delay, 0ms) both !important; }
+body.booting.boot-final-charge :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) { animation: intro-rim-surge 650ms ease-in-out var(--burst-delay, 0ms) both !important; }
+@keyframes intro-rim-dark { from { --intro-border-light: rgba(133,88,166,.46); } to { --intro-border-light: rgba(13,9,16,.1); } }
+@keyframes intro-rim-sparks { 0%, 35%, 72%, 100% { --intro-border-light: rgba(13,9,16,.1); } 18%, 57%, 89% { --intro-border-light: rgba(168,117,206,.7); } }
+@keyframes intro-rim-surge { 0% { --intro-border-light: rgba(13,9,16,.1); } 35% { --intro-border-light: rgba(215,185,238,.95); } 100% { --intro-border-light: rgba(133,88,166,.46); } }
+body.booting:is(.no-pulse-effects, .battery-saver).boot-preflash-flicker :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) { animation: intro-rim-dark 1ms both !important; }
+@media (prefers-reduced-motion: reduce) {
+  body.booting.boot-preflash-flicker :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) { animation: intro-rim-dark 1ms both !important; }
+  body.booting #payoutBoardGrid > .tile.boot-content-visible { animation: none; }
+}
+
+/* The two existing indicators wake before their labels, on separate clocks. */
+body.booting .top-header > .brand-block { opacity: 1; animation: none !important; }
+body.booting:not(.boot-labels-lit) .top-header > .brand-block > span:not(.status-led) { opacity: 0; }
+body.booting .top-header .status-led { animation: indicator-power 1150ms ease-in-out 120ms infinite both; }
+body.booting .top-header .right-brand .status-led { animation-duration: 1430ms; animation-delay: 290ms; }
+@keyframes indicator-power {
+  0% { opacity: .05; filter: brightness(.3); }
+  17% { opacity: .7; filter: brightness(.9); }
+  29% { opacity: .2; filter: brightness(.5); }
+  48% { opacity: 1; filter: brightness(1.1); }
+  66% { opacity: .4; filter: brightness(.7); }
+  87%,100% { opacity: .85; filter: brightness(1); }
+}
+body.booting.boot-all-on .top-header .status-led { animation: none; opacity: 1; }
+body.booting.boot-preflash-dim .top-header .status-led { animation: boot-lights-down 450ms ease-in-out both; }
+body.booting.boot-preflash-flicker .top-header .status-led { animation: boot-preflash-sparks 360ms linear both; }
+body.booting.boot-final-charge .top-header .status-led { animation: boot-lamp-burst 650ms ease-in-out both; }
+/* The existing violet rims surge without turning into a white outline. */
+@keyframes intro-rim-surge {
+  0% { --intro-border-light: rgba(13,9,16,.1); }
+  35% { --intro-border-light: rgba(147,97,190,.7); }
+  100% { --intro-border-light: rgba(133,88,166,.46); }
+}
+body.booting.boot-lingering :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) {
+  animation: none !important;
+  --intro-border-light: rgba(133,88,166,.46);
+}
+body.booting:is(.no-pulse-effects,.battery-saver) .top-header .status-led { animation: none; opacity: 1; filter: none; }
+@media (prefers-reduced-motion: reduce) { body.booting .top-header .status-led { animation: none; opacity: 1; filter: none; } }
+
+/* Existing edges build clockwise from darkness, then flow into their normal light. */
+body.booting:not(.boot-all-on) :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) {
+  animation-name: existing-rim-fade-flow !important;
+  border-color: transparent !important;
+}
+
+/* Border animation cannot override important border colors: animate registered colors. */
+@property --rim-top { syntax:'<color>'; inherits:false; initial-value:transparent; }
+@property --rim-right { syntax:'<color>'; inherits:false; initial-value:transparent; }
+@property --rim-bottom { syntax:'<color>'; inherits:false; initial-value:transparent; }
+@property --rim-left { syntax:'<color>'; inherits:false; initial-value:transparent; }
+body.booting:not(.boot-all-on) :is(.main-container, .top-header .status-box, .ball-recess, #payoutBoardGrid, .control-bar, .main-footer) {
+  border-color: var(--rim-top) var(--rim-right) var(--rim-bottom) var(--rim-left) !important;
+}
+@keyframes existing-rim-fade-flow {
+  0%,8% { --rim-top:transparent; --rim-right:transparent; --rim-bottom:transparent; --rim-left:transparent; }
+  26% { --rim-top:rgba(133,88,166,.2); --rim-right:transparent; --rim-bottom:transparent; --rim-left:transparent; }
+  48% { --rim-top:rgba(133,88,166,.3); --rim-right:rgba(133,88,166,.18); --rim-bottom:transparent; --rim-left:transparent; }
+  70% { --rim-top:rgba(133,88,166,.4); --rim-right:rgba(133,88,166,.3); --rim-bottom:rgba(133,88,166,.2); --rim-left:transparent; }
+  100% { --rim-top:rgba(133,88,166,.46); --rim-right:rgba(133,88,166,.46); --rim-bottom:rgba(133,88,166,.46); --rim-left:rgba(133,88,166,.46); }
+}
+body.booting:not(.boot-all-on) #payoutBoardGrid > .tile.boot-content-visible {
+  animation: power-item-fade 450ms ease-in-out both, intro-item-wake var(--key-number-period,670ms) ease-in-out calc(450ms + var(--preflash-delay, 0ms)) 2 both;
+}
+body.booting:not(.boot-all-on):not(.battery-saver):not(.no-pulse-effects) #autoplayButton.boot-feature-visible {
+  animation: boot-auto-wake 1200ms ease-in-out 2 both !important;
+}
+@keyframes boot-auto-wake {
+  0%, 100% { filter: brightness(.75); }
+  45% { filter: brightness(1.45); }
+}
+body.booting:is(.battery-saver, .no-pulse-effects) #autoplayButton.boot-feature-visible { animation: none !important; opacity: 1; filter: none; }
+@keyframes power-item-fade { 0% {opacity:0;} 35% {opacity:.12;} 55% {opacity:.4;} 70% {opacity:.28;} 100% {opacity:1;} }
+body.booting.boot-labels-lit .top-header > .brand-block > span:not(.status-led) { animation: power-item-fade 1100ms ease-in-out both; }
+body.booting.boot-labels-lit .top-header > .right-brand > span:not(.status-led) { animation-delay:180ms; }
+@media (prefers-reduced-motion:reduce) {
+  body.booting:not(.boot-all-on) #payoutBoardGrid > .tile.boot-content-visible { animation:none; }
+  body.booting:not(.boot-all-on) #autoplayButton.boot-feature-visible { animation:none !important; }
+}
+
+
+/* The existing indicator pair carries power outward before the labels arrive. */
+body.booting:not(.boot-all-on) .top-header .status-led {
+  animation: indicator-outflow 1300ms cubic-bezier(.2,.55,.3,1) 120ms both, indicator-power 1150ms ease-in-out 1420ms infinite;
+}
+body.booting:not(.boot-all-on) .top-header .right-brand .status-led {
+  animation-delay: 200ms, 1500ms;
+  animation-duration: 1300ms, 1430ms;
+}
+@keyframes indicator-outflow {
+  0% { transform: translateX(var(--led-start-x,0px)); opacity:0; filter:brightness(.3); }
+  18% { opacity:.4; }
+  48% { opacity:.65; }
+  100% { transform:translateX(0); opacity:1; filter:brightness(1); }
+}
+body.booting .top-header > .brand-block > span:not(.status-led),
+body.booting.boot-labels-lit .top-header > .brand-block > span:not(.status-led) {
+  animation: power-item-fade 950ms ease-in-out 1550ms both;
+}
+body.booting .top-header > .right-brand > span:not(.status-led),
+body.booting.boot-labels-lit .top-header > .right-brand > span:not(.status-led) { animation-delay:1650ms; }
+@media (prefers-reduced-motion:reduce) {
+  body.booting:not(.boot-all-on) .top-header .status-led { animation:none; transform:none; opacity:1; }
+}
+
+/* A consumed-dot rhythm: each pulse vanishes before the next outward position. */
+@keyframes indicator-outflow {
+  0% { transform:translateX(var(--led-start-x,0px)); opacity:0; }
+  6% { transform:translateX(var(--led-start-x,0px)); opacity:.65; }
+  13% { transform:translateX(calc(var(--led-start-x,0px) * .88)); opacity:0; }
+  22% { transform:translateX(calc(var(--led-start-x,0px) * .75)); opacity:.5; }
+  30% { transform:translateX(calc(var(--led-start-x,0px) * .64)); opacity:0; }
+  39% { transform:translateX(calc(var(--led-start-x,0px) * .53)); opacity:.75; }
+  46% { transform:translateX(calc(var(--led-start-x,0px) * .43)); opacity:.08; }
+  56% { transform:translateX(calc(var(--led-start-x,0px) * .32)); opacity:.55; }
+  64% { transform:translateX(calc(var(--led-start-x,0px) * .23)); opacity:0; }
+  73% { transform:translateX(calc(var(--led-start-x,0px) * .14)); opacity:.8; }
+  81% { transform:translateX(calc(var(--led-start-x,0px) * .07)); opacity:0; }
+  91%,100% { transform:translateX(0); opacity:1; filter:brightness(1); }
+}
+
+/* Fixed track stops, once only; never slide between the consumed positions. */
+body.booting:not(.boot-all-on) .top-header .status-led,
+body.booting:not(.boot-all-on) .top-header .right-brand .status-led {
+  animation-timing-function: steps(1,end), ease-in-out;
+}
+
+/* Large preview reset, outside the right edge and vertically centered. */
+#reloadButtonFooter.floating-refresh {
+  top: 50%;
+  bottom: auto;
+  right: auto;
+  width: 64px;
+  height: 64px;
+  font-size: 30px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}

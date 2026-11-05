@@ -1,0 +1,204 @@
+/* ============================================
+   PERFORMANCE.CSS - Turbo & Battery Modes
+   ============================================ */
+
+/* ===== SHARED PERFORMANCE BASE ===== */
+body.performance-mode .dice-chip,
+body.turbo-autoplay .dice-chip {
+  background: linear-gradient(180deg, rgba(10,8,12,0.6), rgba(8,6,10,0.6));
+  box-shadow: var(--perf-shadow);
+}
+body.battery-saver .main-container,
+body.battery-saver .unified-board {
+  box-shadow: var(--perf-shadow);
+}
+body.battery-saver .main-container {
+  background: linear-gradient(180deg, #0c0c0f 0%, #070709 78%);
+}
+body.battery-saver .unified-board { background: #09090b; }
+
+body.battery-saver .roll-screen::before,
+body.battery-saver .roll-screen.battery-saver::before {
+  display: none;
+}
+
+body.battery-saver .control-bar {
+  border-color: rgba(115,64,163,0.1);
+}
+
+body.battery-saver .space-backdrop,
+body.battery-saver .shooting-star,
+body.battery-saver .nebula,
+body.compact-bg .nebula {
+  display: none !important;
+}
+
+body.battery-saver #starfield-bg,
+body.compact-bg #starfield-bg {
+  display: none !important;
+}
+
+body.battery-saver .game-title-logo {
+  animation: none !important;
+  filter: none !important;
+}
+
+body.compact-bg .game-title-logo {
+  animation: none !important;
+  filter: none !important;
+}
+
+/* ===== SPACE BACKDROP ===== */
+.space-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: #000000;
+  overflow: hidden;
+}
+
+@keyframes starDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(50px); }
+}
+
+/* Hide in performance modes */
+body.turbo-autoplay .space-backdrop,
+body.battery-saver .space-backdrop {
+  opacity: 0.3;
+}
+body.battery-saver .dice-chip {
+  box-shadow: none !important;
+  filter: none !important;
+  transition: var(--perf-transition);
+  will-change: transform, opacity;
+}
+
+body.performance-mode .unified-board,
+body.turbo-autoplay .unified-board,
+body.battery-saver .unified-board {
+  box-shadow: none !important;
+}
+
+body.performance-mode .tile,
+body.turbo-autoplay .tile,
+body.battery-saver .tile {
+  box-shadow: none !important;
+  background: linear-gradient(180deg, #0a0a0c 0%, #060607 100%);
+}
+
+/* ===== TURBO AUTOPLAY MODE ===== */
+body.turbo-autoplay .dice-chip {
+  background: linear-gradient(180deg, #2b2b2b 0%, #222 100%) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  padding: 6px !important;
+  font-size: 1.02rem !important;
+  margin: 2px !important;
+  width: 44px !important;
+  height: 44px !important;
+  opacity: 0;
+  transform: scale(0.82);
+}
+
+body.turbo-autoplay .dice-chip .chip-number {
+  text-shadow: 0 1px 1px rgba(255,255,255,0.24) !important;
+  font-weight: 800;
+  color: #070707 !important;
+  transform: translateZ(0);
+}
+
+body.turbo-autoplay .dice-chip.chip-reveal {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+body.turbo-autoplay .roll-screen,
+body.turbo-autoplay #rollResultsDisplay {
+  background: rgba(0,0,0,0.22) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+body.turbo-autoplay .title-single-flash,
+body.turbo-autoplay .title-triple-flash,
+body.turbo-autoplay .title-rapid-flash {
+  animation: none !important;
+}
+
+body.turbo-autoplay .roll-text-display {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* ===== BATTERY SAVER MODE ===== */
+body.battery-saver {
+  --panel-shadow: var(--perf-shadow);
+  background: #07060a;
+}
+
+/* ============================================
+   PERFORMANCE.CSS - Styles for low-power modes
+   ============================================ */
+
+/* Optional pulses stop without interrupting dice, payout, or bonus feedback. */
+body.no-pulse-effects .bass-pulse,
+body.no-pulse-effects .tick-pulse,
+body.no-pulse-effects .center-pop,
+body.no-pulse-effects .bass-pulse-turbo,
+body.no-pulse-effects .tick-pulse-turbo,
+body.no-pulse-effects .roll-screen,
+body.no-pulse-effects .roll-screen::before,
+body.no-pulse-effects .game-title-logo,
+body.no-pulse-effects .header-roll-status,
+body.no-pulse-effects .roll-text-display:not(.flash-sum),
+body.no-pulse-effects .purple-glow-pulse,
+body.no-pulse-effects .tile.highlight,
+body.no-pulse-effects .tile.value-rest-pulse,
+body.no-pulse-effects .tile.idle-feature,
+body.no-pulse-effects #rollButton.razzle-launch.razzle-ready,
+body.no-pulse-effects .dice-slot.crazy-lock .dice-chip,
+body.no-pulse-effects .dice-chip.stale .chip-number,
+body.no-pulse-effects.razzle-active #payoutBoardGrid,
+body.no-pulse-effects .tile.idle-ping,
+body.no-pulse-effects .tile.idle-ping .tile-sum,
+body.no-pulse-effects .tile.idle-ping .tile-payout {
+  animation: none !important;
+  will-change: auto;
+}
+
+/* Battery saver removes ambient work, but keeps short gameplay transitions. */
+body.battery-saver .main-container::before,
+body.battery-saver .unified-board::after {
+  animation: none !important;
+}
+
+body.battery-saver .tile,
+body.battery-saver .main-container,
+body.battery-saver .unified-board,
+body.battery-saver .control-bar,
+body.battery-saver .main-footer {
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* Battery Saver Tile Highlight Overrides */
+body.battery-saver .tile.highlight-win {
+  box-shadow: inset 0 0 0 3px #22c55e, 0 0 10px #22c55e !important;
+}
+
+body.battery-saver .tile.highlight-neutral {
+  box-shadow: inset 0 0 0 3px #a855f7, 0 0 10px #a855f7 !important;
+}
+
+body.battery-saver .tile.highlight-loss {
+  box-shadow: inset 0 0 0 3px #ef4444, 0 0 10px #ef4444 !important;
+}
+
+body.battery-saver .tile.highlight {
+  animation: none !important; /* Fallback to ensure no animation */
+  box-shadow: inset 0 0 0 3px #a855f7, 0 0 10px #a855f7 !important;
+}

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAZZLE DAZZLE — Unified Grid Prototype</title>
+    <link rel="icon" type="image/png" href="bar.png">
+    <link rel="apple-touch-icon" href="bar.png">
+    
+    <!-- External CSS Files (in order of specificity) -->
+    <link rel="stylesheet" href="BASE.CSS">
+    <link rel="stylesheet" href="COMPONENTS.CSS">
+    <link rel="stylesheet" href="ANIMATIONS.CSS">
+    <link rel="stylesheet" href="MODALS.CSS">
+    <link rel="stylesheet" href="PERFORMANCE.CSS">
+    
+    <!-- Local utilities keep prototype startup independent of CDN downloads. -->
+    <link rel="stylesheet" href="tailwind.css">
+    <link rel="stylesheet" href="control-panel.css">
+
+    <style>
+        @font-face {
+            font-family: 'AlarmClock';
+            src: url('alarm clock.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        #starfield-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; 
+        }
+        .space-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background-color: transparent;
+        }
+        #game-container {
+            position: relative;
+            z-index: 3;
+        }
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: #000;
+        }
+    </style>
+</head>
+<body class="booting readout-loading top-readouts-locked">
+    <div id="background-container">
+        <canvas id="starfield-bg"></canvas>
+        <div class="space-backdrop">
+            <div id="stars1" class="stars"></div>
+            <div id="stars2" class="stars"></div>
+            <div id="stars3" class="stars"></div>
+            <span class="shooting-star one"></span>
+            <span class="shooting-star two"></span>
+            <span class="shooting-star three"></span>
+            <span class="shooting-star four"></span>
+            <span class="shooting-star five"></span>
+            <span class="shooting-star bonus-only six"></span>
+            <span class="shooting-star bonus-only seven"></span>
+            <span class="shooting-star bonus-only eight"></span>
+            <span class="shooting-star bonus-only nine"></span>
+            <span class="shooting-star bonus-only ten"></span>
+            <span class="shooting-star bonus-only eleven"></span>
+            <span class="shooting-star bonus-only twelve"></span>
+            <span class="shooting-star bonus-only thirteen"></span>
+            <span class="shooting-star bonus-only fourteen"></span>
+            <span class="shooting-star bonus-only fifteen"></span>
+            <span class="shooting-star bonus-only sixteen"></span>
+            <span class="shooting-star bonus-only seventeen"></span>
+            <span class="shooting-star bonus-only eighteen"></span>
+            <span class="shooting-star bonus-only nineteen"></span>
+            <span class="shooting-star bonus-only twenty"></span>
+        </div>
+    </div>
+    
+    <!-- Game Container -->
+    <div id="game-container">
+        <div class="main-container purple-glow-pulse">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="brand-block left-brand">
+                    <span class="status-led"></span>
+                    <span id="onoText" class="text-left text-sm font-bold uppercase" style="color: #9CA3AF;">ONOGAMING</span>
+                    
+                </div>
+
+                <div class="header-status-wrap">
+                    <div class="status-box status-left">
+                        <span class="status-label">MULTI</span>
+                        <span id="headerMultiplier" class="status-value">0x</span>
+                    </div>
+                    <div class="status-box status-center">
+                        <span id="rollTextDisplay" class="header-roll-status">POWER ON</span>
+                    </div>
+                    <div class="status-box status-right">
+                        <span class="status-label">SUM</span>
+                        <span id="headerSum" class="status-value">0</span>
+                    </div>
+                </div>
+
+                <div class="brand-block right-brand">
+                    <span class="text-right text-sm font-bold uppercase" style="color: #9CA3AF;">Version 5.3.5</span>
+                    
+                    <span class="status-led"></span>
+                </div>
+            </header>
+
+                <div class="roll-screen ball-recess">
+                    <div class="lime-trim-glow"></div>
+                    <div id="rollResultsDisplay" class="flex flex-wrap justify-center gap-2"></div>
+                </div>
+
+            <!-- Unified Board -->
+            <div id="payoutBoardGrid" class="unified-board" aria-label="Payout board">
+                <!-- Fixed seven-column board. Both 29s occupy its top corners. -->
+
+
+            </div>
+
+            <!-- Control Bar -->
+            <div class="control-bar">
+                <div class="control-stats control-stats-left">
+                    <div class="control-stat">
+                        <span class="stat-label">Balance</span>
+                        <span id="budgetDisplay" class="stat-value text-white">$1000.00</span>
+                    </div>
+                    <div class="control-stat">
+                        <span id="payoutLabel" class="stat-label">Payout</span>
+                        <span id="winAmountDisplay" class="stat-value text-white">$0.00</span>
+                        <span id="payoutMultiplierDisplay" class="win-mult">0x</span>
+                    </div>
+                </div>
+                <div class="control-actions">
+                    <button id="turboButton" class="side-btn" title="Turbo Roll">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="0.9">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </button>
+                    
+                    <button id="rollButton" class="relative">
+                        <span class="moon-phase" aria-hidden="true"><i class="moon-disc"></i></span>
+                        <svg id="rollButtonIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-9 h-9">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        <span id="mainAutoplayPauseIcon" class="main-autoplay-pause hidden" aria-hidden="true"><i></i><i></i></span>
+                        <div id="autoplayCountdown" class="hidden"></div>
+                    </button>
+
+                    <button id="autoplayButton" class="side-btn" title="Autoplay">
+                        <svg id="autoplayIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="0.9">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span id="autoplayBadge" class="auto-badge hidden"></span>
+                        <svg id="stopIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 6h12v12H6z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="control-stats control-stats-right">
+                    <div class="control-stat">
+                        <span id="scoreLabel" class="stat-label">Form</span>
+                        <span id="totalScore" class="stat-value text-white">0</span>
+                    </div>
+                    <div class="control-stat bet-control">
+                        <div class="bet-readout">
+                            <span class="stat-label">Bet Size</span>
+                            <span id="betAmountDisplay" class="stat-value text-white">$10</span>
+                        </div>
+                        <div class="bet-stepper" aria-label="Adjust bet size">
+                            <button id="increaseBetBtn" class="bet-btn" title="Increase Bet" aria-label="Increase Bet">+</button>
+                            <button id="decreaseBetBtn" class="bet-btn" title="Decrease Bet" aria-label="Decrease Bet">−</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="autoGauge" class="auto-gauge is-inactive" aria-label="Autoplay off" aria-live="polite" aria-atomic="true"><span id="autoGaugeLabel" class="stat-label">Auto</span><span id="autoGaugeValue">OFF</span></div>
+
+            <!-- Footer -->
+            <footer class="main-footer">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <button id="muteButton" class="footer-btn">🔊</button>
+                    
+                    <img id="onoLogo" src="brpnpo.png" alt="Ono Logo" style="height:48px; width:auto;">
+                    <button id="settingsButton" class="footer-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="height: 28px; width: 28px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </button>
+                    
+                </div>
+            </footer>
+            </div>
+        </div>
+    </div>
+
+    <button id="reloadButtonFooter" class="footer-btn floating-refresh" title="Reload" aria-label="Refresh">⟳</button>
+
+    <!-- MODALS AND SCRIPTS -->
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay hidden">
+        <div class="settings-modal">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="closeSettingsButton" class="settings-close" aria-label="Close settings">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="settings-tabs">
+                    <button class="tab-button active" data-tab="general">General</button>
+                    <button class="tab-button" data-tab="sound">Sound</button>
+                    <button class="tab-button" data-tab="history">Last 100 Bets</button>
+                    <button class="tab-button" data-tab="how-to-play">How to Play</button>
+                    <button class="tab-button" data-tab="pay-table">Pay Table</button>
+                </div>
+
+                <div id="general" class="tab-content p-2">
+                    <div class="setting-item">
+                        <label for="animationsToggle" style="font-weight:700;">Background Animations</label>
+                        <input type="checkbox" id="animationsToggle" class="offscreen" checked>
+                        <label for="animationsToggle" class="knob-switch"></label>
+                    </div>
+                    <div class="setting-item">
+                        <label for="pulseToggle" style="font-weight:700;">Pulse Effects</label>
+                        <input type="checkbox" id="pulseToggle" class="offscreen" checked>
+                        <label for="pulseToggle" class="knob-switch"></label>
+                    </div>
+                    <div class="setting-item">
+                        <label for="tileColorsToggle" style="font-weight:700;">Show Tile Colors</label>
+                        <input type="checkbox" id="tileColorsToggle" class="offscreen">
+                        <label for="tileColorsToggle" class="knob-switch"></label>
+                    </div>
+                    <div class="setting-item">
+                        <label for="batterySaverToggle" style="font-weight:700;">Battery Saver Mode</label>
+                        <input type="checkbox" id="batterySaverToggle" class="offscreen">
+                        <label for="batterySaverToggle" class="knob-switch"></label>
+                    </div>
+                </div>
+
+                <div id="sound" class="tab-content hidden p-2">
+                    <div class="setting-item volume-setting">
+                        <label for="effectsVolume">Sound Effects</label>
+                        <input type="range" id="effectsVolume" min="0" max="100" value="100">
+                        <output id="effectsVolumeValue" for="effectsVolume">100%</output>
+                    </div>
+                    <div class="setting-item volume-setting">
+                        <label for="musicVolume">Music</label>
+                        <input type="range" id="musicVolume" min="0" max="100" value="8">
+                        <output id="musicVolumeValue" for="musicVolume">8%</output>
+                    </div>
+                    <div class="setting-item volume-setting">
+                        <label for="environmentVolume">Environment</label>
+                        <input type="range" id="environmentVolume" min="0" max="100" value="0" disabled aria-describedby="environmentUnavailable">
+                        <span id="environmentUnavailable">Unavailable</span>
+                    </div>
+                    <div class="setting-item">
+                        <label for="soundToggle" style="font-weight:700;">Sound Effects</label>
+                        <input type="checkbox" id="soundToggle" class="offscreen" checked>
+                        <label for="soundToggle" class="knob-switch"></label>
+                    </div>
+                    <div class="setting-item">
+                        <label for="musicToggle" style="font-weight:700;">Spacey Music</label>
+                        <input type="checkbox" id="musicToggle" class="offscreen" checked>
+                        <label for="musicToggle" class="knob-switch"></label>
+                    </div>
+                </div>
+
+                <div id="history" class="tab-content hidden p-4">
+                    <div id="historyList"></div>
+                </div>
+
+                <div id="how-to-play" class="tab-content hidden p-4">
+                    <ul class="list-disc list-inside space-y-3 text-base">
+                        <li>Click <strong>ROLL</strong> to place a bet at your chosen <strong>Bet Size</strong>.</li>
+                        <li>Eight dice are rolled, and their values are added up <br> to get a <strong>Sum</strong>.</li>
+                        <li>If the Sum matches a number on the board, you win<br> the corresponding payout multiplier.</li>
+                    </ul>
+                </div>
+
+                <div id="pay-table" class="tab-content hidden p-4">
+                    <div id="payoutTableContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Autoplay Confirm Modal -->
+    <div id="autoplayConfirmModal" class="modal-overlay hidden">
+        <div class="settings-modal autoplay-confirm-modal">
+            <button id="autoplayConfirmClose" class="autoplay-modal-close" type="button" aria-label="Close auto-bet menu">&times;</button>
+            <h2 class="text-2xl font-bold mb-4" style="font-family: 'Arial Black', Arial, sans-serif; font-size: 1.6rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Auto Run Bets?</h2>
+            <div class="auto-count-control">
+                <div class="autoplay-slider-wrapper">
+                    <input id="autoplayCount" type="range" min="0" max="6" step="1" value="0">
+                    <div class="autoplay-slider-dots">
+                        <span data-index="0"></span>
+                        <span data-index="1"></span>
+                        <span data-index="2"></span>
+                        <span data-index="3"></span>
+                        <span data-index="4"></span>
+                        <span data-index="5"></span>
+                        <span data-index="6"></span>
+                    </div>
+                </div>
+                <div class="auto-count-value">
+                    Bets Selected: <span id="autoplayCountValue" style="color: #ace940; font-weight: 800;">10</span>
+                </div>
+                
+                <div class="autoplay-stop-conditions">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <label for="stopOnBigWinToggle" style="color: #e5e5e5; font-size: 1rem; font-weight: 700;">Stop on big wins (30x+)</label>
+                        <div>
+                            <input type="checkbox" id="stopOnBigWinToggle" class="offscreen" />
+                            <label for="stopOnBigWinToggle" class="knob-switch"></label>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <label for="stopOnLossToggle" style="color: #e5e5e5; font-size: 1rem; font-weight: 700;">Stop on 50% loss</label>
+                        <div>
+                            <input type="checkbox" id="stopOnLossToggle" class="offscreen" />
+                            <label for="stopOnLossToggle" class="knob-switch"></label>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <label for="autoStartBonus" style="color: #e5e5e5; font-size: 1rem; font-weight: 700;">Auto start bonus</label>
+                        <div>
+                            <input type="checkbox" id="autoStartBonus" class="offscreen" />
+                            <label for="autoStartBonus" class="knob-switch"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-actions">
+                <button id="autoplayConfirmYes" class="settings-button">Start</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Autoplay Finished Modal -->
+    <div id="autoplayFinishedModal" class="modal-overlay hidden">
+        <div class="modal modal-sm">
+            <div class="modal-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-lime-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h2 class="modal-title">Autoplay Finished</h2>
+            <p class="modal-text">Your autoplay session has completed.</p>
+            <div class="modal-actions">
+                <button id="autoplayRepeat" class="btn-primary">Repeat</button>
+                <button id="autoplayFinishedClose" class="btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stop on Loss Modal -->
+    <div id="stopLossModal" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Stop on Loss Limit</h2>
+            <p>Autoplay stopped because your balance dropped below the set threshold.</p>
+            <div class="modal-actions">
+                <button id="stopLossOk" class="btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Big Win Modal -->
+    <div id="bigWinModal" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Big Win!</h2>
+            <p>Autoplay stopped on a big win!</p>
+            <div class="modal-actions">
+                <button id="bigWinOk" class="btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insufficient Funds Modal -->
+    <div id="insufficientModal" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Insufficient Funds</h2>
+            <p>You do not have enough balance to place that bet.</p>
+            <div class="modal-actions">
+                <button id="insufficientClose" class="btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payout Table Modal -->
+    <div id="payoutTableModal" class="modal-overlay hidden">
+        <div class="modal">
+            <h2>Payout Table</h2>
+            <div id="payoutTableContent" class="payout-grid"></div>
+            <div class="modal-actions">
+                <button id="closePayoutTableButton" class="btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Razzle Dazzle: earned by landing on 29 -->
+    <div id="dazzleModal" class="modal-overlay hidden">
+        <div class="modal dazzle-modal">
+            <h2 class="modal-title">Prepare to Be Dazzled</h2>
+            <div id="dazzleOptions" class="dazzle-options">
+                <div id="dazzleCrazy" class="dazzle-option"><strong>Crazy Eight</strong><span>Eight free spins. A 1 or 6 is guaranteed each round.<br><br>COLLECT 3 MORE 29 TILES FOR A CHANCE AT WINNING BIG IN THE SWEET 16.</span></div>
+                <div id="dazzleTen" class="dazzle-option"><strong>Hang 10</strong><span>Eight free spins. One high-value target gets +50%.<br><br>COLLECT 3 MORE 29 TILES FOR A CHANCE AT WINNING BIG IN THE SWEET 16.</span></div>
+            </div>
+            <div id="dazzleContinuePanel" class="dazzle-continue">
+                <div class="modal-actions">
+                    <button id="dazzleContinueAuto" class="btn-primary" disabled>Start</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sweet16AwardModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="sweet16AwardTitle">
+        <div class="modal dazzle-modal">
+            <h2 id="sweet16AwardTitle" class="modal-title">Sweet 16</h2>
+            <p class="modal-text">You collected three 29s! Enjoy a free spin where every ball is a 1 or a 6.</p>
+            <div class="modal-actions"><button id="sweet16AwardGo" class="btn-primary">Go</button></div>
+        </div>
+    </div>
+
+    <div id="dazzleSummaryModal" class="modal-overlay hidden">
+        <div class="modal dazzle-modal">
+            <h2 id="dazzleSummaryTitle" class="modal-title">Razzle Ready</h2>
+            <p id="dazzleSummaryText" class="modal-text"></p>
+            <div class="modal-actions">
+                <button id="dazzleSummaryGo" class="btn-primary">Start</button>
+                <button id="dazzleSummaryAuto" class="btn-primary hidden">Continue</button>
+                <button id="dazzleSummaryStop" class="btn-secondary hidden">Stop</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="spaceyMusic" loop autoplay>
+        <source src="spacey.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Game Scripts -->
+    <script src="starfield.js"></script>
+    <script src="sound.js"></script>
+    <script src="intro-sequence.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
+
+
